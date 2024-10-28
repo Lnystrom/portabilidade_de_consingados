@@ -86,6 +86,10 @@ table.auto_set_font_size(False)
 table.set_fontsize(10)
 table.scale(1.2, 1.2)  # Aumentar a escala da tabela
 
+# Ajustar a largura das colunas
+table.auto_set_column_width([0, 1, 2, 3, 4, 5, 6, 7, 8])  # Ajusta automaticamente todas as colunas
+table[1, 1].set_width(0.3)  # Define a largura da coluna "Banco de Origem"
+
 # Salvar a tabela como imagem
 plt.savefig("tabela_liquidacao.png", bbox_inches='tight', dpi=300)
 
