@@ -38,14 +38,8 @@ Automatizar o processo de extração de dados e cálculos financeiros de portabi
 
 ## Exemplo de Uso
 
-Para utilizar esta ferramenta, execute o código a partir de um arquivo PDF contendo os dados dos contratos consignados. O sistema processará as informações e retornará um relatório com a taxa de juros, valor presente, parcelas restantes, e um gráfico resumido dos dados processados.
+Para utilizar esta ferramenta, execute o código junto a um arquivo PDF em sua pasta contendo os dados dos contratos consignados. O sistema processará as informações e retornará um relatório com a taxa de juros, valor presente, parcelas restantes, e um gráfico resumido dos dados processados sem a necessidade de inputs.
 
-### Código Exemplo
-
-```python
-# Exemplo de uso principal da função de cálculo
-taxa = calcular_taxa(n_periodos=36, pmt=300, valor_presente=10000)
-valor_liquidacao = calcular_liquidacao(valor_parcela=300, meses_restantes=18, taxa_juros_mensal=taxa)
 ```
 
 ## Licença
