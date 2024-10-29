@@ -38,11 +38,10 @@ def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
         print(f"Erro: {e}")
         return None
 
-def calcular_liquidacao(valor_emprestado, valor_parcela, meses_restantes, taxa_juros_mensal):
+def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     """
     Calcula o valor de liquidação de um empréstimo considerando o valor presente das parcelas restantes.
     
-    :param valor_emprestado: Valor total emprestado (float).
     :param valor_parcela: Valor da parcela mensal (float).
     :param meses_restantes: Número de meses restantes para pagamento (int).
     :param taxa_juros_mensal: Taxa de juros mensal (em percentual).
@@ -56,10 +55,7 @@ def calcular_liquidacao(valor_emprestado, valor_parcela, meses_restantes, taxa_j
     for i in range(1, meses_restantes + 1):
         valor_presente += valor_parcela / ((1 + taxa_juros_decimal) ** i)
     
-    # O valor total a ser pago é a soma do valor presente das parcelas e do saldo devedor
-    valor_liquidacao = valor_presente + valor_emprestado
-    
-    return valor_liquidacao
+    return valor_presente
 
 # Abrir o PDF com pdfplumber
 with pdfplumber.open("consignado.pdf") as pdf:
@@ -101,13 +97,13 @@ with pdfplumber.open("consignado.pdf") as pdf:
                     #calculo de taxa de juros
                     taxa = round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                      # Calcular o valor de liquidação
-                    valor_liquidacao = round(calcular_liquidacao(valor_emprestado, valor_parcela, meses_restantes, taxa), 2)
+                    valor_liquidacao = round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
 
                     # Adicionar informações ao filtro
-                    dados_filtrados.append([contrato, banco, situacao, data_inclusao, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
+                    dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
         
 # Imprimir o cabeçalho da tabela original
-cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Data de Inclusão', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
+cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Início de Desconto', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
 # print(f"{cabecalho_original[0]:<20} {cabecalho_original[1]:<30} {cabecalho_original[2]:<10} {cabecalho_original[3]:<15} {cabecalho_original[4]:<15} {cabecalho_original[5]:<10} {cabecalho_original[6]:<15} {cabecalho_original[7]:<15}{cabecalho_original[8]:<6}{cabecalho_original[9]:<6}{cabecalho_original[10]:<6}")
 
 # Imprimir o resultado da tabela original
