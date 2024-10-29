@@ -40,7 +40,18 @@ Automatizar o processo de extração de dados e cálculos financeiros de portabi
 
 Para utilizar esta ferramenta, execute o código junto a um arquivo PDF em sua pasta contendo os dados dos contratos consignados. O sistema processará as informações e retornará um relatório com a taxa de juros, valor presente, parcelas restantes, e um gráfico resumido dos dados processados sem a necessidade de inputs.
 
-```
+---
 
-## Licença
+## Oportunidades de Melhoria e Propostas Futuras
 
+Atualmente, o sistema enfrenta alguns desafios relacionados à inconsistência dos dados de entrada, especialmente para alguns consignados que apresentam valor emprestado como `R$ 0`. Essa informação incorreta dificulta a interpretação dos dados e afeta a precisão dos cálculos financeiros. 
+
+### Propostas para Melhorias Futura
+
+1. **Tratamento de Dados Inconsistentes**:
+   - Implementar verificações de qualidade de dados para identificar e tratar registros com valor emprestado `R$ 0` ou outras inconsistências antes de iniciar os cálculos. Essa medida poderia incluir a adição de regras de validação e notificações sobre dados incompletos ou incorretos.
+
+2. **Integração com Banco de Dados**:
+   - Planeja-se integrar o algoritmo a uma base de dados centralizada, permitindo que o sistema fique disponível para toda a rede de agências. Essa melhoria possibilitará o armazenamento seguro de históricos e o acesso em tempo real a cálculos financeiros, facilitando o uso e a atualização dos dados pelos funcionários de diversas unidades.
+
+Essas melhorias visam aumentar a robustez, confiabilidade e escalabilidade da ferramenta, tornando-a um recurso eficiente e acessível para a rede de agências na análise de portabilidade de crédito consignado.
