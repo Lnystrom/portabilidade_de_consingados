@@ -1,6 +1,7 @@
 import requests
 from tkinter import *
 from tkinter import filedialog
+from os import mkdir
 
 # Função para abrir o gerenciador de arquivos
 def selecionar_arquivo_pdf():
@@ -15,33 +16,41 @@ def selecionar_arquivo_pdf():
     else:
         print("Nenhum arquivo selecionado.")
 
+#Função para gravar texto
+def gravar_texto():
+    CPF = entrada.get()
+    CPF_extraido.config(text=f"CPF Registrado: {CPF}")
+    nome_da_pasta = f"{CPF}"
+    try:
+        # Cria a pasta
+        mkdir(nome_da_pasta)
+        print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
+    except FileExistsError:
+        print(f"A pasta '{nome_da_pasta}' já existe.")
 
-def pegar_cotacoes():
-    requisicao = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL")
-
-    requisicao_dic = requisicao.json()
-
-    cotacao_dolar = requisicao_dic['USDBRL']['bid']
-    cotacao_euro = requisicao_dic['EURBRL']['bid']
-    cotacao_btc = requisicao_dic['BTCBRL']['bid']
-
-    texto = f'''
-    Dólar: {cotacao_dolar}
-    Euro: {cotacao_euro}
-    BTC: {cotacao_btc}'''
-
-    print(texto)
-
-pegar_cotacoes()
+#UI propriamente dita
 
 janela = Tk()
 janela.title("Simulador de Portabilidade de Consignados")
 
-interação_1 = Label(janela, text="O Extrato de Empréstimos Consignados deve estar em .pdf e ser criado digitalmente")
+interação_1 = Label(janela, text="Digite o CPF do cliente:")
 interação_1.grid(column=0, row=0)
 
+# Campo de entrada (Entry)
+entrada = Entry(janela)
+entrada.grid(column=0, row=1)
+# Botão para capturar a entrada
+botao =Button(janela, text="Mostrar Entrada", command=gravar_texto)
+botao.grid(column=0, row=2)
+#Exibir CPF:
+CPF_extraido = Label(janela, text="")
+CPF_extraido.grid(column=0, row=3)
+
+interação_2 = Label(janela, text="O Extrato de Empréstimos Consignados deve estar em .pdf e ser criado digitalmente")
+interação_2.grid(column=0, row=4)
+
 botão = Button(janela, text="Anexar extrato de empréstimos", command=selecionar_arquivo_pdf)
-botão.grid(column=0, row=1)
+botão.grid(column=0, row=5)
 
 
 janela.mainloop()
