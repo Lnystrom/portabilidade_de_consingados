@@ -1,20 +1,37 @@
 import requests
 from tkinter import *
 from tkinter import filedialog
-from os import mkdir
+from os import mkdir, path, makedirs
+import shutil
 
-# Função para abrir o gerenciador de arquivos
+# Função para abrir o gerenciador de arquivos e copiar o PDF para uma pasta já existente
 def selecionar_arquivo_pdf():
-
-    # Abre o diálogo para selecionar um arquivo
-    caminho_arquivo = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")]  # Título da janela de diálogo e filtra para arquivos PDF
-    )
+    arquivo_pdf = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
     
     # Verifica se um arquivo foi selecionado
-    if caminho_arquivo:
-        print(f"Arquivo selecionado: {caminho_arquivo}")
+    if arquivo_pdf:
+        print(f"Arquivo selecionado: {arquivo_pdf}")
+        
+        # Obtém o nome da pasta que foi criada na função gravar_texto()
+        nome_da_pasta = gravar_texto()  # A pasta é criada e seu nome é retornado
+        
+        # Verifica se a pasta de destino existe
+        if not path.exists(nome_da_pasta):
+            print(f"A pasta de destino não existe: {nome_da_pasta}")
+            return
+        
+        # Define o caminho completo do destino com nome fixo "consignado.pdf"
+        caminho_destino = path.join(nome_da_pasta, "consignado.pdf")
+        
+        try:
+            # Copia o arquivo para a pasta de destino com o nome fixo "consignado.pdf"
+            shutil.copy(arquivo_pdf, caminho_destino)
+            print(f"Arquivo copiado para: {caminho_destino}")
+        except Exception as e:
+            print(f"Ocorreu um erro ao copiar o arquivo: {e}")
     else:
-        print("Nenhum arquivo selecionado.")
+        print("Nenhum arquivo foi selecionado.")
+
 
 #Função para gravar texto
 def gravar_texto():
@@ -23,10 +40,12 @@ def gravar_texto():
     nome_da_pasta = f"{CPF}"
     try:
         # Cria a pasta
-        mkdir(nome_da_pasta)
+        makedirs(nome_da_pasta)
         print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
     except FileExistsError:
         print(f"A pasta '{nome_da_pasta}' já existe.")
+
+    return nome_da_pasta
 
 #UI propriamente dita
 
