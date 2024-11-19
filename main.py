@@ -8,10 +8,6 @@ from scipy.optimize import fsolve
 import numpy as np
 import gui
 
-# Chama a função principal do gui.py para iniciar a interface gráfica
-if __name__ == "__main__":
-    gui.main()
-
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
     Calcula a taxa de juros periódica usando o método de Newton-Raphson.
@@ -62,8 +58,9 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
+
 # Abrir o PDF com pdfplumber
-with pdfplumber.open("consignado.pdf") as pdf:
+with pdfplumber.open(gui.selecionar_arquivo_pdf) as pdf:
     # Variável para armazenar o texto filtrado
     dados_filtrados = []
 
@@ -106,7 +103,7 @@ with pdfplumber.open("consignado.pdf") as pdf:
 
                     # Adicionar informações ao filtro
                     dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
-        
+
 # Imprimir o cabeçalho da tabela original
 cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Início de Desconto', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
 # print(f"{cabecalho_original[0]:<20} {cabecalho_original[1]:<30} {cabecalho_original[2]:<10} {cabecalho_original[3]:<15} {cabecalho_original[4]:<15} {cabecalho_original[5]:<10} {cabecalho_original[6]:<15} {cabecalho_original[7]:<15}{cabecalho_original[8]:<6}{cabecalho_original[9]:<6}{cabecalho_original[10]:<6}")

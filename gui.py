@@ -32,6 +32,8 @@ def selecionar_arquivo_pdf():
     else:
         print("Nenhum arquivo foi selecionado.")
 
+    return caminho_destino
+
 
 #Função para gravar texto
 def gravar_texto():
@@ -47,8 +49,10 @@ def gravar_texto():
 
     return nome_da_pasta
 
-#UI propriamente dita
+def atualizar_UI():
+    janela.after(2000)
 
+#UI propriamente dita
 janela = Tk()
 janela.title("Simulador de Portabilidade de Consignados")
 
@@ -73,6 +77,3 @@ botão.grid(column=0, row=5)
 
 
 janela.mainloop()
-
-if __name__ == "__main__":
-    main()  # Só executa o código GUI se for chamado diretamente
