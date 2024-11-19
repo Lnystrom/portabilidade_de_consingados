@@ -73,3 +73,6 @@ botão.grid(column=0, row=5)
 
 
 janela.mainloop()
+
+if __name__ == "__main__":
+    main()  # Só executa o código GUI se for chamado diretamente

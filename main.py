@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.optimize import fsolve
 import numpy as np
+import gui
+
+# Chama a função principal do gui.py para iniciar a interface gráfica
+if __name__ == "__main__":
+    gui.main()
 
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
