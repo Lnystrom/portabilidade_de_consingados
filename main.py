@@ -111,9 +111,9 @@ with pdfplumber.open(out_file) as pdf:
                     valor_total_pago = parcelas*valor_parcela
                     
                     #calculo de taxa de juros
-                    taxa = round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
+                    taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                     # Calcular o valor de liquidação
-                    valor_liquidacao = round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
+                    valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
 
                     # Adicionar informações ao filtro
                     dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])

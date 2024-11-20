@@ -1,6 +1,6 @@
-tabela_liquidacao.csv
-tabela_liquidacao.png
-consignado.pdf
+*.csv
+*.png
+*.pdf
 .venv
 05335694190
 __pycache__
