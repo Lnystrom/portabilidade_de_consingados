@@ -6,19 +6,19 @@ def start_gui():
     def selecionar_arquivo_pdf():
         global caminho_destino
         arquivo_pdf = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
-        
+
         # Verifica se um arquivo foi selecionado
         if arquivo_pdf:
             print(f"Arquivo selecionado: {arquivo_pdf}")
             
             # Obtém o nome da pasta que foi criada na função gravar_texto()
             nome_da_pasta = gravar_texto()  # A pasta é criada e seu nome é retornado
-            
+
             # Verifica se a pasta de destino existe
             if not os.path.exists(nome_da_pasta):
                 print(f"A pasta de destino não existe: {nome_da_pasta}")
                 return
-            
+
             # Define o caminho completo do destino com nome fixo "consignado.pdf"
             caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
 
@@ -26,12 +26,14 @@ def start_gui():
                 # Copia o arquivo para a pasta de destino com o nome fixo "consignado.pdf"
                 shutil.copy(arquivo_pdf, caminho_destino)
                 print(f"Arquivo copiado para: {caminho_destino}")
+                 # Chamando a função para exibir a 3ª interação após o arquivo ser copiado
+                mostrar_interacao_3()
             except Exception as e:
                 print(f"Ocorreu um erro ao copiar o arquivo: {e}")
         else:
             print("Nenhum arquivo foi selecionado.")
 
-        return caminho_destino
+       
 
     def gravar_texto():
         CPF = entrada.get()
@@ -48,8 +50,32 @@ def start_gui():
 
         result.set(nome_da_pasta)
         return nome_da_pasta
-    
-    
+
+    def mostrar_interacao_2():
+        # Remove widgets da 1ª interação
+        interação_1.grid_forget()
+        entrada.grid_forget()
+        botao.grid_forget()
+        CPF_extraido.grid_forget()
+
+        # Exibe a 2ª interação
+        interação_2.grid(column=0, row=0)
+        botão.grid(column=0, row=1)
+
+    def mostrar_interacao_3():
+        # Remove widgets da 2ª interação
+        interação_2.grid_forget()
+        botão.grid_forget()
+
+        # Exibe a 3ª interação
+        caminho_pasta = result.get()
+        label_resultado = Label(janela, text=f"Os arquivos estarão disponíveis na pasta '{caminho_pasta}'")
+        label_resultado.grid(column=0, row=0)
+
+        # Botão para processar o arquivo e fechar a janela
+        botao_processar = Button(janela, text="Processar Arquivo", command=janela.quit)
+        botao_processar.grid(column=0, row=1)
+
     #UI propriamente dita
     janela = Tk()
     janela.title("Simulador de Portabilidade de Consignados")
@@ -65,17 +91,21 @@ def start_gui():
     # Botão para capturar a entrada
     botao =Button(janela, text="Mostrar Entrada", command=gravar_texto)
     botao.grid(column=0, row=2)
-    #Exibir CPF:
+    # Exibir CPF:
     CPF_extraido = Label(janela, text="")
     CPF_extraido.grid(column=0, row=3)
 
+    # Depois de mostrar o CPF, passa para a próxima interação
+    botao.config(command=lambda: [gravar_texto(), mostrar_interacao_2()])
+
     interação_2 = Label(janela, text="O arquivo deve estar em .pdf e ser criado digitalmente")
-    interação_2.grid(column=0, row=4)
-
+    
+    # Botão para anexar o extrato
     botão = Button(janela, text="Anexar Extrato", command=selecionar_arquivo_pdf)
-    botão.grid(column=0, row=5)
 
+    
+    
     janela.mainloop()
 
+    # A função agora retorna o resultado da pasta final (seja CPF ou "saida")
     return result.get()
-

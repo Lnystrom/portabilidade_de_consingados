@@ -70,7 +70,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
     # Verifica se o valor emprestado é maior que 0 e a taxa é maior que 1.2
     if valor_emprestado <= 0 or taxa <= 1.2:
         print("Os dados fornecidos são inválidos.")
@@ -78,7 +78,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa):
         # Solicita novamente o valor emprestado até ser válido
         while valor_emprestado <= 0:
             try:
-                valor_emprestado = float(input("Informe um valor emprestado válido (maior que 0): "))
+                valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
                 taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                 if valor_emprestado <= 0:
                     print("Valor emprestado deve ser maior que 0.")
@@ -132,7 +132,7 @@ with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
                     #calculo de taxa de juros
                     taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                     
-                    valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa)
+                    valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
                     
                     # Calcular o valor de liquidação
                     valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
