@@ -3,5 +3,6 @@ tabela_liquidacao.png
 consignado.pdf
 .venv
 05335694190
+__pycache__
 # *.pdf
 # *.png

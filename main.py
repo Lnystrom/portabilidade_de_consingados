@@ -1,12 +1,4 @@
-from dateutil.relativedelta import relativedelta
-import pdfplumber
-from datetime import datetime
-import calendar
-import matplotlib.pyplot as plt
-import pandas as pd
-from scipy.optimize import fsolve
-import numpy as np
-import gui
+from imports import *
 
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
@@ -60,7 +52,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
 
 
 # Abrir o PDF com pdfplumber
-with pdfplumber.open(gui.selecionar_arquivo_pdf) as pdf:
+with pdfplumber.open(gui.selecionar_arquivo_pdf()) as pdf:
     # Variável para armazenar o texto filtrado
     dados_filtrados = []
 
