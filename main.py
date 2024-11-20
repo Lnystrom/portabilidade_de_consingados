@@ -15,7 +15,10 @@ import numpy as np
 
 # Bibliotecas de otimização
 from scipy.optimize import fsolve
-import gui
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+
+from gui import start_gui
 
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
@@ -69,50 +72,52 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
 
 dados_filtrados = []
 
-def processar_pdf():
-# Abrir o PDF com pdfplumber
-    with pdfplumber.open(gui.selecionar_arquivo_pdf()) as pdf:
-        # Variável para armazenar o texto filtrado
-        # Iterar pelas páginas do PDF
-        for page in pdf.pages:
-            # Extrair tabelas da página
-            for table in page.extract_tables():
-                # Pular cabeçalhos
-                for linha in table[2:]:
-                    # Verificar se a linha tem pelo menos 14 colunas
-                    if len(linha) > 13 and linha[2] == "Ativo":  # Coluna de situação (index 2)
-                        contrato = linha[0].replace('\n', '')    # Número do contrato
-                        banco = linha[1].replace('\n', '')       # Banco
-                        situacao = linha[2]                       # Situação (já é 'Ativo')
-                        data_inclusao = linha[4].replace('\n', '') # Data de inclusão (index 4)
-                        inicio_de_desconto = linha[5].replace('\n', '') # Data de inclusão (index 4)
-                        data_vencimento = linha[6].replace('\n', '') # Aqui deve estar a data no formato mm/yyyy
-                        data_vencimento_formatada = datetime.strptime(data_vencimento, '%m/%Y').strftime('%d/%m/%y')
-                        parcelas = int(linha[7].replace('\n', ''))    # Quantidade de parcelas
-                        valor_parcela = float(linha[8].replace('R$', '').replace('.', '').replace(',', '.').strip())  # Valor da parcela (index 8)
-                        valor_emprestado = float(linha[9].replace('.', '').replace(',', '.').replace('R$', '').strip())  # Valor emprestado (index 9)
+out_file = start_gui()
+print("Arquivo:", out_file)
 
-                        # Obter o último dia do mês para data_vencimento
-                        mes, ano = map(int, data_vencimento.split('/'))
-                        ultimo_dia_mes = calendar.monthrange(ano, mes)[1]
-                        data_vencimento_formatada = datetime.strptime(f"{ultimo_dia_mes}/{mes}/{ano}", '%d/%m/%Y')
-                        data_atual = datetime.now()
 
-                        # Calcular meses restantes usando relativedelta a partir da data atual
-                        diferenca = relativedelta(data_vencimento_formatada, data_atual)
-                        meses_restantes = diferenca.years * 12 + diferenca.months
-                        
-                        # Calcular o valor total pago considerando as parcelas
-                        valor_total_pago = parcelas*valor_parcela
-                        
-                        #calculo de taxa de juros
-                        taxa = round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
-                        # Calcular o valor de liquidação
-                        valor_liquidacao = round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
+with pdfplumber.open(out_file) as pdf:
+    # Variável para armazenar o texto filtrado
+    # Iterar pelas páginas do PDF
+    for page in pdf.pages:
+        # Extrair tabelas da página
+        for table in page.extract_tables():
+            # Pular cabeçalhos
+            for linha in table[2:]:
+                # Verificar se a linha tem pelo menos 14 colunas
+                if len(linha) > 13 and linha[2] == "Ativo":  # Coluna de situação (index 2)
+                    contrato = linha[0].replace('\n', '')    # Número do contrato
+                    banco = linha[1].replace('\n', '')       # Banco
+                    situacao = linha[2]                       # Situação (já é 'Ativo')
+                    data_inclusao = linha[4].replace('\n', '') # Data de inclusão (index 4)
+                    inicio_de_desconto = linha[5].replace('\n', '') # Data de inclusão (index 4)
+                    data_vencimento = linha[6].replace('\n', '') # Aqui deve estar a data no formato mm/yyyy
+                    data_vencimento_formatada = datetime.strptime(data_vencimento, '%m/%Y').strftime('%d/%m/%y')
+                    parcelas = int(linha[7].replace('\n', ''))    # Quantidade de parcelas
+                    valor_parcela = float(linha[8].replace('R$', '').replace('.', '').replace(',', '.').strip())  # Valor da parcela (index 8)
+                    valor_emprestado = float(linha[9].replace('.', '').replace(',', '.').replace('R$', '').strip())  # Valor emprestado (index 9)
 
-                        # Adicionar informações ao filtro
-                        dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
-                        print("processamento concluído!")
+                    # Obter o último dia do mês para data_vencimento
+                    mes, ano = map(int, data_vencimento.split('/'))
+                    ultimo_dia_mes = calendar.monthrange(ano, mes)[1]
+                    data_vencimento_formatada = datetime.strptime(f"{ultimo_dia_mes}/{mes}/{ano}", '%d/%m/%Y')
+                    data_atual = datetime.now()
+
+                    # Calcular meses restantes usando relativedelta a partir da data atual
+                    diferenca = relativedelta(data_vencimento_formatada, data_atual)
+                    meses_restantes = diferenca.years * 12 + diferenca.months
+                    
+                    # Calcular o valor total pago considerando as parcelas
+                    valor_total_pago = parcelas*valor_parcela
+                    
+                    #calculo de taxa de juros
+                    taxa = round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
+                    # Calcular o valor de liquidação
+                    valor_liquidacao = round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
+
+                    # Adicionar informações ao filtro
+                    dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
+                    print("processamento concluído!")
 
 # Imprimir o cabeçalho da tabela original
 cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Início de Desconto', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
