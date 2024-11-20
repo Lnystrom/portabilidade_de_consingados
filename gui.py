@@ -1,4 +1,11 @@
-from imports import *
+# Tkinter e arquivos de diálogo
+from tkinter import *
+from tkinter import filedialog
+
+# Bibliotecas de manipulação de diretórios e arquivos
+from os import mkdir, path, makedirs
+import shutil
+import threading 
 
 # Função para abrir o gerenciador de arquivos e copiar o PDF para uma pasta já existente
 def selecionar_arquivo_pdf():
@@ -67,9 +74,5 @@ interação_2.grid(column=0, row=4)
 
 botão = Button(janela, text="Anexar extrato de empréstimos", command=selecionar_arquivo_pdf)
 botão.grid(column=0, row=5)
-
-def atualizar_UI():
-    janela.after(10000)
-
 
 janela.mainloop()
