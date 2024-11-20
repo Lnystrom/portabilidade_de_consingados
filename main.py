@@ -72,11 +72,11 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
 
 dados_filtrados = []
 
-out_file = start_gui()
-print("Arquivo:", out_file)
+out_folder = start_gui()
+print("Arquivo:", out_folder)
 
 
-with pdfplumber.open(out_file) as pdf:
+with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
     for page in pdf.pages:
@@ -129,7 +129,7 @@ cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'I
 
 # Criar DataFrame com os dados
 df = pd.DataFrame(dados_filtrados, columns=cabecalho_original)
-df.to_csv("tabela_liquidacao.csv", index=False)
+df.to_csv(f"{out_folder}/tabela_liquidacao.csv", index=False)
 
 # Configurar o gráfico
 fig, ax = plt.subplots(figsize=(24, len(df) * 0.5))  # Tamanho da imagem
@@ -147,6 +147,6 @@ table.auto_set_column_width([0, 1, 2, 3, 4, 5, 6, 7, 8])  # Ajusta automaticamen
 table[1, 1].set_width(0.3)  # Define a largura da coluna "Banco de Origem"
 
 # Salvar a tabela como imagem
-plt.savefig("tabela_liquidacao.png", bbox_inches='tight', dpi=300)
+plt.savefig(f"{out_folder}/tabela_liquidacao.png", bbox_inches='tight', dpi=300)
 
 # trocar vencimento por parcelas restantes

@@ -21,7 +21,6 @@ def start_gui():
             
             # Define o caminho completo do destino com nome fixo "consignado.pdf"
             caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
-            result.set(caminho_destino)
 
             try:
                 # Copia o arquivo para a pasta de destino com o nome fixo "consignado.pdf"
@@ -47,6 +46,7 @@ def start_gui():
         except FileExistsError:
             print(f"A pasta '{nome_da_pasta}' já existe.")
 
+        result.set(nome_da_pasta)
         return nome_da_pasta
     
     
