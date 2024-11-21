@@ -132,8 +132,7 @@ with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
                     #calculo de taxa de juros
                     taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                     
-                    if taxa <= 1.3 or valor_emprestado == 0:
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
+                    valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
                     
                     # Calcular o valor de liquidação
                     valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
