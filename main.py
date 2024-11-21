@@ -24,12 +24,23 @@ def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
     Calcula a taxa de juros periódica usando o método de Newton-Raphson.
     
-    :param n_periodos: Número total de períodos (parcelas)
-    :param pmt: Valor da parcela paga em cada período
-    :param valor_presente: Valor do empréstimo inicial
-    :param chute_inicial: Estimativa inicial para a taxa de juros
-    :return: Taxa de juros periódica ou None se não for possível calcular
+    A função utiliza o método de Newton-Raphson para encontrar a taxa de juros periódica que satisfaz
+    a equação de valor presente das parcelas. Se a taxa calculada for negativa ou se houver erro no cálculo,
+    a função retorna None.
+    
+    Parâmetros:
+    -----------
+    n_periodos (int): Número total de períodos (parcelas).
+    pmt (float): Valor da parcela paga em cada período.
+    valor_presente (float): Valor do empréstimo inicial (valor presente).
+    chute_inicial (float, opcional): Estimativa inicial para a taxa de juros. O valor padrão é 0.01.
+    
+    Retorna:
+    --------
+    float ou None: A taxa de juros periódica calculada ou None se não for possível calcular.
     """
+
+
     def funcao_taxa(r):
         # Evitar overflow em cálculos
         try:
@@ -55,11 +66,21 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     """
     Calcula o valor de liquidação de um empréstimo considerando o valor presente das parcelas restantes.
     
-    :param valor_parcela: Valor da parcela mensal (float).
-    :param meses_restantes: Número de meses restantes para pagamento (int).
-    :param taxa_juros_mensal: Taxa de juros mensal (em percentual).
-    :return: Valor total a ser pago (float).
+    A função calcula o valor total a ser pago, levando em consideração o valor das parcelas restantes
+    e a taxa de juros mensal. O cálculo é feito através da fórmula de valor presente.
+
+    Parâmetros:
+    -----------
+    valor_parcela (float): Valor da parcela mensal a ser paga.
+    meses_restantes (int): Número de meses restantes para o pagamento do empréstimo.
+    taxa_juros_mensal (float): Taxa de juros mensal em percentual.
+
+    Retorna:
+    --------
+    float: Valor total a ser pago, considerando as parcelas restantes e a taxa de juros.
     """
+
+
     # Converter taxa de juros percentual para decimal
     taxa_juros_decimal = taxa_juros_mensal / 100
     
@@ -71,7 +92,25 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     return valor_presente
 
 def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
-    # Verifica se o valor emprestado é maior que 0 e a taxa é maior que 1.2
+    """
+    Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
+    
+    Se o valor emprestado for menor ou igual a 0 ou a taxa for menor ou igual a 1.3, a função solicita 
+    ao usuário que forneça novos valores até que os dados sejam válidos.
+    
+    Parâmetros:
+    -----------
+    parcelas (int): Número de parcelas do empréstimo.
+    valor_parcela (float): Valor de cada parcela mensal.
+    valor_emprestado (float): Valor total emprestado.
+    taxa (float): Taxa de juros do empréstimo.
+    contrato (str): Número do contrato para identificação.
+
+    Retorna:
+    --------
+    tuple: Tupla contendo o valor emprestado e a taxa corrigidos, caso necessário.
+    """
+
     if valor_emprestado <= 0 or taxa <= 1.3:
         print("Os dados fornecidos são inválidos.")
         
@@ -144,10 +183,6 @@ with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
 # Imprimir o cabeçalho da tabela original
 cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Início de Desconto', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
 # print(f"{cabecalho_original[0]:<20} {cabecalho_original[1]:<30} {cabecalho_original[2]:<10} {cabecalho_original[3]:<15} {cabecalho_original[4]:<15} {cabecalho_original[5]:<10} {cabecalho_original[6]:<15} {cabecalho_original[7]:<15}{cabecalho_original[8]:<6}{cabecalho_original[9]:<6}{cabecalho_original[10]:<6}")
-
-# Imprimir o resultado da tabela original
-# for item in dados_filtrados:
-#     print(f"{item[0]:<20} {item[1]:<30} {item[2]:<10} {item[3]:<15} {item[4]:<15} {item[5]:<10} {item[6]:<15.2f} {item[7]:<15.2f} {item[8]:<20.2f}{round(item[9], 2):<20}{item[10]:<20.2f}")
 
 # Criar DataFrame com os dados
 df = pd.DataFrame(dados_filtrados, columns=cabecalho_original)
