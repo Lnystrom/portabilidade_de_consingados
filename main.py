@@ -45,7 +45,7 @@ def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
 
     # Usando fsolve para encontrar a taxa
     try:
-        taxa = fsolve(funcao_taxa, chute_inicial, maxfev=1000)  # Aumentar maxfev se necessário
+        taxa = fsolve(funcao_taxa, chute_inicial, maxfev=1000)[0]  # Aumentar maxfev se necessário
         return taxa if taxa > 0 else None  # Retorna None se a taxa for negativa
     except Exception as e:
         print(f"Erro: {e}")
@@ -76,7 +76,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
         print("Os dados fornecidos são inválidos.")
         
         # Solicita novamente o valor emprestado até ser válido
-        while valor_emprestado <= 0:
+        while valor_emprestado <= 0 or taxa <= 1.3:
             try:
                 valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
                 taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
@@ -136,7 +136,7 @@ with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
                     
                     # Calcular o valor de liquidação
                     valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
-
+                    print(f"{taxa}")
                     # Adicionar informações ao filtro
                     dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
                     print("processamento concluído!")
