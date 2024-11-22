@@ -1,57 +1,88 @@
-
-# Portabilidade de Consignados
-
-**Ferramenta para Facilitar a Portabilidade de Crédito INSS**
-
-Este projeto destina-se a simplificar o processo de portabilidade de crédito consignado para beneficiários do INSS. Utilizando automação para extração de dados e cálculos financeiros, a ferramenta facilita a análise e a gestão de empréstimos consignados, reduzindo o tempo e o esforço de cálculos complexos para funcionários.
-
-## Funcionalidades Principais
-
-1. **Extração de Dados de PDF**: Utilizando a biblioteca `pdfplumber`, o sistema lê e processa automaticamente dados de contratos a partir de arquivos PDF, evitando a inserção manual de dados.
-2. **Cálculo de Taxa de Juros**: A função `calcular_taxa` emprega o método Newton-Raphson para encontrar a taxa de juros periódica com base nos valores presentes dos empréstimos e das parcelas.
-3. **Cálculo de Valor de Liquidação**: A função `calcular_liquidacao` determina o valor presente das parcelas restantes, utilizando a taxa de juros e o número de parcelas pendentes, permitindo uma análise precisa do saldo devedor.
-4. **Geração de Relatórios e Tabelas**: Gera gráficos e tabelas detalhados para visualização dos dados financeiros, exportando relatórios como imagens e arquivos `.csv` para fácil compartilhamento e documentação.
-
-## Estrutura do Projeto
-
-A estrutura básica do código e principais métodos utilizados incluem:
-
-- **Bibliotecas Utilizadas**:
-  - `dateutil.relativedelta`: Para calcular a diferença de tempo entre datas.
-  - `pdfplumber`: Para extração de dados de arquivos PDF.
-  - `datetime` e `calendar`: Para manipulação e formatação de datas.
-  - `matplotlib` e `pandas`: Para visualização e organização dos dados em tabelas e gráficos.
-  - `scipy.optimize` e `numpy`: Para cálculos financeiros avançados, incluindo o método Newton-Raphson para cálculo de taxas.
-
-- **Funções Principais**:
-  - **`calcular_taxa`**: Calcula a taxa de juros periódica com base em parâmetros fornecidos, usando o método de Newton-Raphson para solucionar a função de valor presente dos pagamentos.
-  - **`calcular_liquidacao`**: Calcula o valor de liquidação de um empréstimo com base no valor presente das parcelas restantes, usando uma taxa de juros periódica.
-  - **Leitura e Extração de PDF**: Extrai dados de contratos ativos, filtra informações relevantes e calcula o valor de liquidação para cada contrato identificado.
-
-## Importância da Automação
-
-Automatizar o processo de extração de dados e cálculos financeiros de portabilidade é essencial para bancos e outras instituições financeiras, especialmente em tarefas repetitivas e de alta precisão. Esta ferramenta:
-
-- **Aumenta a eficiência operacional** ao reduzir o tempo necessário para extrair e processar dados.
-- **Minimiza erros humanos** em cálculos financeiros complexos.
-- **Proporciona análises financeiras rápidas e precisas** para tomada de decisões informadas, seja para renegociações de empréstimos ou portabilidade para outras instituições.
-
-## Exemplo de Uso
-
-Para utilizar esta ferramenta, execute o código junto a um arquivo PDF em sua pasta contendo os dados dos contratos consignados. O sistema processará as informações e retornará um relatório com a taxa de juros, valor presente, parcelas restantes, e um gráfico resumido dos dados processados sem a necessidade de inputs.
+Claro! Aqui está um modelo de `README.md` baseado no conteúdo que você enviou:
 
 ---
 
-## Oportunidades de Melhoria e Propostas Futuras
+# Portabilidade de Consignados
 
-Atualmente, o sistema enfrenta alguns desafios relacionados à inconsistência dos dados de entrada, especialmente para alguns consignados que apresentam valor emprestado como `R$ 0`. Essa informação incorreta dificulta a interpretação dos dados e afeta a precisão dos cálculos financeiros. 
+**Ferramenta para Facilitar a Portabilidade de Crédito Consignado para Beneficiários do INSS**
 
-### Propostas para Melhorias Futura
+Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos consignados para beneficiários do INSS, automatizando o processo de extração de dados, cálculos financeiros e geração de relatórios. A ferramenta utiliza bibliotecas poderosas de Python para extrair informações de contratos consignados, calcular taxas de juros, valores de liquidação e gerar relatórios detalhados.
 
-1. **Tratamento de Dados Inconsistentes**:
-   - Implementar verificações de qualidade de dados para identificar e tratar registros com valor emprestado `R$ 0` ou outras inconsistências antes de iniciar os cálculos. Essa medida poderia incluir a adição de regras de validação e notificações sobre dados incompletos ou incorretos.
+## Funcionalidades Principais
 
-2. **Integração com Banco de Dados**:
-   - Planeja-se integrar o algoritmo a uma base de dados centralizada, permitindo que o sistema fique disponível para toda a rede de agências. Essa melhoria possibilitará o armazenamento seguro de históricos e o acesso em tempo real a cálculos financeiros, facilitando o uso e a atualização dos dados pelos funcionários de diversas unidades.
+1. **Extração de Dados de Contratos em PDF**  
+   A ferramenta usa a biblioteca `pdfplumber` para ler automaticamente arquivos PDF de contratos consignados e extrair as informações necessárias de forma eficiente, evitando a inserção manual de dados.
 
-Essas melhorias visam aumentar a robustez, confiabilidade e escalabilidade da ferramenta, tornando-a um recurso eficiente e acessível para a rede de agências na análise de portabilidade de crédito consignado.
+2. **Cálculo de Taxa de Juros**  
+   A função `calcular_taxa` utiliza o método de Newton-Raphson para encontrar a taxa de juros periódica com base nos valores de empréstimo e parcelas, proporcionando cálculos precisos e rápidos.
+
+3. **Cálculo de Valor de Liquidação**  
+   Com a função `calcular_liquidacao`, o sistema calcula o valor presente das parcelas restantes de um empréstimo, levando em consideração a taxa de juros e o número de parcelas pendentes. Isso permite uma análise precisa do saldo devedor.
+
+4. **Geração de Relatórios e Gráficos**  
+   A ferramenta gera gráficos e tabelas com dados financeiros extraídos dos contratos, oferecendo uma visualização clara das informações. Além disso, permite a exportação dos relatórios para arquivos `.csv` ou imagens, facilitando o compartilhamento e documentação.
+
+## Estrutura do Projeto
+
+A estrutura do código é organizada em duas partes principais:
+
+### 1. Interface Gráfica (GUI)
+- **Bibliotecas**: `Tkinter`, `screeninfo`
+- Responsável pela interação com o usuário, permitindo a entrada do CPF, seleção de arquivos PDF e criação de pastas para armazenar os dados.
+- A interface é criada com `Tkinter`, fornecendo uma experiência de usuário simples e eficiente para navegar entre as etapas do processo.
+
+### 2. Processamento de Dados e Cálculos
+- **Bibliotecas**: `pdfplumber`, `scipy.optimize`, `matplotlib`, `numpy`, `pandas`, `datetime`
+- **Funções**:
+  - **`calcular_taxa`**: Calcula a taxa de juros periódica usando o método de Newton-Raphson.
+  - **`calcular_liquidacao`**: Calcula o valor de liquidação de um empréstimo, levando em consideração as parcelas restantes e a taxa de juros.
+  - **Leitura de PDF**: Extração de dados de contratos consignados em formato PDF e validação dos dados antes de realizar cálculos.
+
+## Como Usar
+
+1. **Preparação**:
+   - Certifique-se de ter o Python instalado (recomendado Python 3.7 ou superior).
+   - Instale as dependências necessárias. Você pode fazer isso com o comando:
+     ```bash
+     pip install -r requirements.txt
+     ```
+
+2. **Executar o Sistema**:
+   - Execute o arquivo `main.py` para abrir a interface gráfica.
+   - Insira o CPF do cliente e clique em "Criar pasta" para armazenar os dados.
+   - Selecione o arquivo PDF do contrato consignado e clique em "Anexar Extrato".
+   - A ferramenta processará os dados do contrato, realizará os cálculos financeiros e exibirá o valor de liquidação e outras informações importantes.
+   - Ao final, o sistema gerará um relatório detalhado, exportando os dados para uma pasta de saída.
+
+## Exemplo de Uso
+
+Após executar a ferramenta, a interface gráfica solicitará que o usuário forneça o CPF e o arquivo PDF do contrato consignado. A ferramenta processará automaticamente o arquivo e exibirá informações como:
+
+- Valor do empréstimo
+- Valor das parcelas
+- Taxa de juros
+- Valor de liquidação do contrato
+
+Esses dados podem ser exportados para relatórios ou analisados diretamente na interface.
+
+## Oportunidades de Melhoria
+
+Atualmente, o sistema lida bem com a extração de dados, mas algumas melhorias podem ser feitas:
+
+1. **Tratamento de Dados Inconsistentes**:  
+   Adicionar mais validações e verificações de consistência dos dados extraídos dos contratos, especialmente para situações em que o valor do empréstimo é zero ou inválido.
+
+2. **Integração com Banco de Dados**:  
+   Para escalar a solução, seria útil integrar a ferramenta com um banco de dados centralizado, permitindo o armazenamento e acesso rápido a informações históricas de contratos de diferentes clientes.
+
+3. **Melhorias na Interface Gráfica**:  
+   Aperfeiçoar a interface para incluir mais opções de visualização, como filtros por banco ou status dos contratos, e permitir a customização de relatórios.
+
+## Tecnologias Utilizadas
+
+- **Python**: Linguagem de programação utilizada para o desenvolvimento do sistema.
+- **Tkinter**: Biblioteca para a criação da interface gráfica do usuário (GUI).
+- **pdfplumber**: Para leitura e extração de dados de arquivos PDF.
+- **Scipy**: Usado para otimização, incluindo o cálculo de taxas de juros através do método de Newton-Raphson.
+- **Matplotlib**: Para gerar gráficos e visualizações.
+- **Pandas**: Para manipulação e análise de dados.
