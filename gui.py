@@ -2,13 +2,41 @@ import shutil
 import os
 import tkinter as tk
 from tkinter import filedialog
+from screeninfo import get_monitors
 
 def start_gui():
     # Criação da janela principal (Tk)
     janela = tk.Tk()
     janela.title("Simulador de Portabilidade de Consignados")
-    janela.geometry("500x400")
+
+  # Definir largura e altura da janela
+    largura = 600
+    altura = 400
+
+    # Obter informações sobre os monitores conectados
+    monitors = get_monitors()
+
+    # Se houver múltiplos monitores, escolher o monitor principal ou um específico
+    monitor = monitors[0]  # Seleciona o monitor primário (primeiro monitor na lista)
+    
+    screen_width = monitor.width
+    screen_height = monitor.height
+
+    # Calcula a posição para centralizar a janela no monitor selecionado
+    x = (screen_width // 2) - (largura // 2)
+    y = (screen_height // 2) - (altura // 2)
+
+    # Configura a geometria da janela com a posição calculada
+    janela.geometry(f'{largura}x{altura}+{x}+{y}')
+
     janela.configure(bg="#2C3E50")  # Cor de fundo azul marinho
+
+    # Ajustando o layout da janela para centralizar os widgets
+    janela.grid_columnconfigure(0, weight=1, minsize=500)  # Ajusta a coluna para se expandir
+    janela.grid_rowconfigure(0, weight=1)  # Ajusta a linha para se expandir
+    janela.grid_rowconfigure(1, weight=1)  # Ajusta a linha para se expandir
+    janela.grid_rowconfigure(2, weight=1)  # Ajusta a linha para se expandir
+    janela.grid_rowconfigure(3, weight=1)  # Ajusta a linha para se expandir
 
     # Criar a variável result após a criação da janela
     result = tk.StringVar()
@@ -68,7 +96,7 @@ def start_gui():
 
         # Exibe a 3ª interação
         caminho_pasta = result.get()
-        label_resultado = tk.Label(janela, text=f"Os arquivos estarão disponíveis na pasta '{caminho_pasta}'", font=("Georgia", 14), bg="#FFFFFF", fg="#2C3E50")
+        label_resultado = tk.Label(janela, text=f"Os arquivos estarão disponíveis na pasta '{caminho_pasta}' \n caso seja necessário a correção de dados será solicitado \n a inserção via terminal (Prompt de Comando)", font=("Georgia", 14), fg="white", bg="#2C3E50")
         label_resultado.grid(column=0, row=0, padx=20, pady=20)
 
         # Botão para processar o arquivo e fechar a janela
@@ -100,7 +128,7 @@ def start_gui():
     entrada.grid(column=0, row=1, padx=20, pady=10, columnspan=2, sticky="nsew")
 
     # Botão para capturar a entrada
-    botao = tk.Button(janela, text="Mostrar Entrada", command=lambda: [gravar_texto(), mostrar_interacao_2()], font=("Georgia", 14), bg="#4CAF50", fg="white", relief="flat", padx=20, pady=10)
+    botao = tk.Button(janela, text="Criar pasta", command=lambda: [gravar_texto(), mostrar_interacao_2()], font=("Georgia", 14), bg="#4CAF50", fg="white", relief="flat", padx=20, pady=10)
     botao.grid(column=0, row=2, padx=20, pady=10, columnspan=2, sticky="nsew")
 
     # Exibir CPF:
