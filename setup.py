@@ -11,7 +11,7 @@ setup(
             "include_files": ["gui.py"],
         }
     },
-    executables=[Executable("main.py", icon="meu_icone.ico")]  # Aqui é onde você adiciona o ícone
+    executables=[Executable("main.py", icon="icone.ico")]  # Aqui é onde você adiciona o ícone
 )
 
 #python setup.py build
