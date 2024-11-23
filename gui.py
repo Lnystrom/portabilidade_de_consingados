@@ -9,10 +9,6 @@ def start_gui():
     janela = tk.Tk()
     janela.title("Simulador de Portabilidade de Consignados")
 
-  # Definir largura e altura da janela
-    largura = 600
-    altura = 400
-
     # Obter informações sobre os monitores conectados
     monitors = get_monitors()
 
@@ -22,6 +18,10 @@ def start_gui():
     screen_width = monitor.width
     screen_height = monitor.height
 
+  # Definir largura e altura da janela
+    largura = monitor.width
+    altura = monitor.height
+
     # Calcula a posição para centralizar a janela no monitor selecionado
     x = (screen_width // 2) - (largura // 2)
     y = (screen_height // 2) - (altura // 2)
@@ -29,7 +29,7 @@ def start_gui():
     # Configura a geometria da janela com a posição calculada
     janela.geometry(f'{largura}x{altura}+{x}+{y}')
 
-    janela.configure(bg="#2C3E50")  # Cor de fundo azul marinho
+    janela.configure(bg="#E4EBF2")  # Cor de fundo azul marinho
 
     # Ajustando o layout da janela para centralizar os widgets
     janela.grid_columnconfigure(0, weight=1, minsize=500)  # Ajusta a coluna para se expandir

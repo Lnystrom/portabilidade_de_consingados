@@ -4,5 +4,7 @@
 .venv
 __pycache__
 build
+*.ico
+complex_example.py
 # *.pdf
 # *.png
