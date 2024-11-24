@@ -1,6 +1,5 @@
 import shutil
 import os
-from tkinter import filedialog
 from screeninfo import get_monitors
 import customtkinter
 
@@ -41,6 +40,24 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
 
+        # Variável de controle para armazenar o nome da pasta
+        
+        result = customtkinter.StringVar()
+
+        def gravar_cpf():
+            CPF = entrada.get()
+            CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
+            nome_da_pasta = str(CPF)
+            if not len(nome_da_pasta):
+                nome_da_pasta = "saida"
+            try:
+                os.makedirs(nome_da_pasta)
+                print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
+            except FileExistsError:
+                print(f"A pasta '{nome_da_pasta}' já existe.")
+            result.set(nome_da_pasta)
+            return nome_da_pasta
+
         def ocultar_1():
             welcome_frame.place_forget()
             botao.place_forget()
@@ -50,6 +67,12 @@ class App(customtkinter.CTk):
             entrada_label.pack()
             entrada.pack()
             entrada_botao.pack()
+
+        def ocultar_2():
+            gravar_cpf()
+            entrada_frame.destroy()
+
+
 
 
         # configure window
@@ -92,11 +115,14 @@ class App(customtkinter.CTk):
         botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_1)
         botao.place(x=0,y=2)
 
-        #texto
+        #Página 2
         entrada_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
         entrada_label = customtkinter.CTkLabel(entrada_frame, text="Por favor, insira o CPF do Cliente", text_color="black", font=("Times New Roman", 16))
         entrada = customtkinter.CTkEntry(entrada_frame, 250, 25, None, None, bg_color="white", text_color="black")
-        entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_1)
+        CPF_extraido = customtkinter.CTkLabel(entrada_frame)
+        entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_2)
+
+        #página 3
 
 if __name__ == "__main__":
     app = App()
