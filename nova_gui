@@ -40,11 +40,17 @@ my_custom_theme = {
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
-        
-        # Função para ocultar os frames
-        def ocultar_frames():
-            for frame in frames:
-                frame.place_forget()
+
+        def ocultar_1():
+            welcome_frame.place_forget()
+            botao.place_forget()
+            
+            # Configurar a janela para usar grid
+            entrada_frame.place(x=largura/2 -150, y= 550)
+            entrada_label.pack()
+            entrada.pack()
+            entrada_botao.pack()
+
 
         # configure window
         self.title("Calculadora de Portabilidade")
@@ -83,10 +89,15 @@ class App(customtkinter.CTk):
         welcome_text_2.pack()  # Add padding around the label
 
         # Botão para mudar para outra página
-        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_frames)
+        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_1)
         botao.place(x=0,y=2)
-        frames = [welcome_frame, canvas_2, botao]
-        
+
+        #texto
+        entrada_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+        entrada_label = customtkinter.CTkLabel(entrada_frame, text="Por favor, insira o CPF do Cliente", text_color="black", font=("Times New Roman", 16))
+        entrada = customtkinter.CTkEntry(entrada_frame, 250, 25, None, None, bg_color="white", text_color="black")
+        entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_1)
+
 if __name__ == "__main__":
     app = App()
     app.mainloop()
