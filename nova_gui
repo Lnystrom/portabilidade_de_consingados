@@ -48,17 +48,17 @@ class App(customtkinter.CTk):
             CPF = entrada.get().strip()  # Remove espaços extras
             if not CPF:
                 print("CPF não fornecido.")
-                return  # Não continua sem CPF
+                nome_da_pasta = "saida"
+                return  nome_da_pasta
             CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
             nome_da_pasta = str(CPF)
-            if not len(nome_da_pasta):
-                nome_da_pasta = "saida"
             try:
                 os.makedirs(nome_da_pasta)
                 print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
             except FileExistsError:
                 print(f"A pasta '{nome_da_pasta}' já existe.")
             result.set(nome_da_pasta)
+            print(nome_da_pasta)
             return nome_da_pasta
 
 
@@ -68,9 +68,6 @@ class App(customtkinter.CTk):
             if arquivo_pdf:
                 print(f"Arquivo selecionado: {arquivo_pdf}")
                 nome_da_pasta = gravar_cpf()  # A pasta é criada e seu nome é retornado
-                if not os.path.exists(nome_da_pasta):
-                    print(f"A pasta de destino não existe: {nome_da_pasta}")
-                    return
                 caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
 
                 try:
@@ -93,7 +90,7 @@ class App(customtkinter.CTk):
 
         def ocultar_2():
             gravar_cpf()
-            entrada_frame.destroy()
+            entrada_frame.place(x=largura+500, y= 50)
             anexo_frame.place(x=largura/2 -250, y= 550)
             anexo_label.pack()
             anexo_botao.pack()
