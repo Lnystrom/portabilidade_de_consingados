@@ -45,20 +45,17 @@ class App(customtkinter.CTk):
         result = customtkinter.StringVar()
 
         def gravar_cpf():
-            CPF = entrada.get().strip()  # Remove espaços extras
-            if not CPF:
-                print("CPF não fornecido.")
-                nome_da_pasta = "saida"
-                return  nome_da_pasta
+            CPF = entrada.get()
             CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
             nome_da_pasta = str(CPF)
+            if not len(nome_da_pasta):
+                nome_da_pasta = "saida"
             try:
                 os.makedirs(nome_da_pasta)
                 print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
             except FileExistsError:
                 print(f"A pasta '{nome_da_pasta}' já existe.")
             result.set(nome_da_pasta)
-            print(nome_da_pasta)
             return nome_da_pasta
 
 
