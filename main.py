@@ -56,125 +56,170 @@ my_custom_theme = {
 
 }
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
+def start_gui():
+    class App(customtkinter.CTk):
+        def __init__(self):
+            super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
 
-        # Variável de controle para armazenar o nome da pasta
-        
-        result = customtkinter.StringVar()
-
-        def gravar_cpf():
-            CPF = entrada.get()
-            CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
-            nome_da_pasta = str(CPF)
-            if not len(nome_da_pasta):
-                nome_da_pasta = "saida"
-            try:
-                os.makedirs(nome_da_pasta)
-                print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
-            except FileExistsError:
-                print(f"A pasta '{nome_da_pasta}' já existe.")
-            result.set(nome_da_pasta)
-            return nome_da_pasta
-
-
-        def selecionar_arquivo():
-            arquivo_pdf = customtkinter.filedialog.askopenfile(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
-
-            if arquivo_pdf:
-                print(f"Arquivo selecionado: {arquivo_pdf}")
-                nome_da_pasta = gravar_cpf()  # A pasta é criada e seu nome é retornado
-                caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
-
-                try:
-                    shutil.copy(arquivo_pdf.name, caminho_destino)  # Certifique-se de usar o 'name' do arquivo
-                    print(f"Arquivo copiado para: {caminho_destino}")
-                except Exception as e:
-                    print(f"Ocorreu um erro ao copiar o arquivo: {e}")
-            else:
-                print("Nenhum arquivo foi selecionado.")
-
-        def ocultar_1():
-            welcome_frame.place_forget()
-            botao.place_forget()
+            # Variável de controle para armazenar o nome da pasta
             
-            # Configurar a janela para usar grid
-            entrada_frame.place(x=largura/2 -150, y= 550)
-            entrada_label.pack()
-            entrada.pack()
-            entrada_botao.pack()
+            result = customtkinter.StringVar()
 
-        def ocultar_2():
-            gravar_cpf()
-            entrada_frame.place(x=largura+500, y= 50)
-            anexo_frame.place(x=largura/2 -250, y= 550)
-            anexo_label.pack()
-            anexo_botao.pack()
-
-        def ocultar_3():
-            selecionar_arquivo()
-            anexo_frame.place_forget()
-
+            def gravar_cpf():
+                CPF = entrada.get()
+                CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
+                nome_da_pasta = str(CPF)
+                if not len(nome_da_pasta):
+                    nome_da_pasta = "saida"
+                try:
+                    os.makedirs(nome_da_pasta)
+                    print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
+                except FileExistsError:
+                    print(f"A pasta '{nome_da_pasta}' já existe.")
+                result.set(nome_da_pasta)
+                return nome_da_pasta
 
 
+            def selecionar_arquivo():
+                arquivo_pdf = customtkinter.filedialog.askopenfile(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
 
-        # configure window
-        self.title("Calculadora de Portabilidade")
-        self.geometry(f'{largura}x{altura}+{x}+{y}')
-        self.configure(fg_color=my_custom_theme["primary_color"])  # Light Grayish Blue
+                if arquivo_pdf:
+                    print(f"Arquivo selecionado: {arquivo_pdf}")
+                    nome_da_pasta = gravar_cpf()  # A pasta é criada e seu nome é retornado
+                    caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
 
-        linhas_frame = customtkinter.CTkFrame(self, fg_color=None, width=largura, height=75)
-        linhas_frame.place(x=0,y=0)
-        # Create the canvas_1
-        canvas_1 = customtkinter.CTkCanvas(linhas_frame, width=largura, height=100)
-        canvas_1.pack()
-        # Draw the first rectangle with color1
-        canvas_1.create_rectangle(0, 0, largura, 25, outline="", width=3, fill="white")
-        # Draw the second rectangle with color2
-        canvas_1.create_rectangle(0, 25, largura, 75, outline="", width=3, fill=my_custom_theme["color2"])
-        # Draw the third rectangle with color3
-        canvas_1.create_rectangle(0, 75, largura, 100, outline="", width=3, fill=my_custom_theme["color8"])
+                    try:
+                        shutil.copy(arquivo_pdf.name, caminho_destino)  # Certifique-se de usar o 'name' do arquivo
+                        print(f"Arquivo copiado para: {caminho_destino}")
+                    except Exception as e:
+                        print(f"Ocorreu um erro ao copiar o arquivo: {e}")
+                else:
+                    print("Nenhum arquivo foi selecionado.")
+
+            def ocultar_1():
+                welcome_frame.place_forget()
+                botao.place_forget()
+                
+                # Configurar a janela para usar grid
+                entrada_frame.place(x=largura/2 -150, y= 550)
+                entrada_label.pack()
+                entrada.pack()
+                entrada_botao.pack()
+
+            def ocultar_2():
+                gravar_cpf()
+                entrada_frame.place(x=largura+500, y= 50)
+                anexo_frame.place(x=largura/2 -250, y= 550)
+                anexo_label.pack()
+                anexo_botao.pack()
+
+            def ocultar_3():
+                selecionar_arquivo()
+                anexo_frame.place_forget()
+
+            # configure window
+            self.title("Calculadora de Portabilidade")
+            self.geometry(f'{largura}x{altura}+{x}+{y}')
+            self.configure(fg_color=my_custom_theme["primary_color"])  # Light Grayish Blue
+
+            linhas_frame = customtkinter.CTkFrame(self, fg_color=None, width=largura, height=75)
+            linhas_frame.place(x=0,y=0)
+            # Create the canvas_1
+            canvas_1 = customtkinter.CTkCanvas(linhas_frame, width=largura, height=100)
+            canvas_1.pack()
+            # Draw the first rectangle with color1
+            canvas_1.create_rectangle(0, 0, largura, 25, outline="", width=3, fill="white")
+            # Draw the second rectangle with color2
+            canvas_1.create_rectangle(0, 25, largura, 75, outline="", width=3, fill=my_custom_theme["color2"])
+            # Draw the third rectangle with color3
+            canvas_1.create_rectangle(0, 75, largura, 100, outline="", width=3, fill=my_custom_theme["color8"])
 
 
-        canvas_2 = customtkinter.CTkCanvas(self, width=largura, height=150)
-        canvas_2.place(x= 20, y=500, width=largura-20, height=150)
-        # Draw the first rectangle with color1
-        canvas_2.create_rectangle(0, 0, largura-50, 25, outline="", width=3, fill="white")
-        canvas_2.create_rectangle(0, 30, largura-50, 150, outline="", width=3, fill="white")
+            canvas_2 = customtkinter.CTkCanvas(self, width=largura, height=150)
+            canvas_2.place(x= 20, y=500, width=largura-20, height=150)
+            # Draw the first rectangle with color1
+            canvas_2.create_rectangle(0, 0, largura-50, 25, outline="", width=3, fill="white")
+            canvas_2.create_rectangle(0, 30, largura-50, 150, outline="", width=3, fill="white")
 
-        #Draw the text
-        # texto_1 = customtkinter.CTkLabel(self, largura, 25, text_color="black", text="Bem vindo ao app")
+            #Draw the text
+            # texto_1 = customtkinter.CTkLabel(self, largura, 25, text_color="black", text="Bem vindo ao app")
 
-        # Create the initial page (Welcome page)
-        welcome_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=150)
-        welcome_frame.place(x= largura/2.7, y=550)
+            # Create the initial page (Welcome page)
+            welcome_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=150)
+            welcome_frame.place(x= largura/2.7, y=550)
 
-        welcome_text_1 = customtkinter.CTkLabel(welcome_frame, text="Seja bem vindo à", text_color="black", font=("Times New Roman", 16))
-        welcome_text_1.pack()  # Add padding around the label
-        welcome_text_2 = customtkinter.CTkLabel(welcome_frame, text="Calculadora de Saldo de Liquidação de Portabilidades", text_color="#5bc2e7", font=("Times New Roman", 20))
-        welcome_text_2.pack()  # Add padding around the label
+            welcome_text_1 = customtkinter.CTkLabel(welcome_frame, text="Seja bem vindo à", text_color="black", font=("Times New Roman", 16))
+            welcome_text_1.pack()  # Add padding around the label
+            welcome_text_2 = customtkinter.CTkLabel(welcome_frame, text="Calculadora de Saldo de Liquidação de Portabilidades", text_color="#5bc2e7", font=("Times New Roman", 20))
+            welcome_text_2.pack()  # Add padding around the label
 
-        # Botão para mudar para outra página
-        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_1)
-        botao.place(x=0,y=2)
+            # Botão para mudar para outra página
+            botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_1)
+            botao.place(x=0,y=2)
 
-        #Página 2
-        entrada_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
-        entrada_label = customtkinter.CTkLabel(entrada_frame, text="Por favor, insira o CPF do Cliente", text_color="black", font=("Times New Roman", 16))
-        entrada = customtkinter.CTkEntry(entrada_frame, 250, 25, None, None, bg_color="white", text_color="black")
-        CPF_extraido = customtkinter.CTkLabel(entrada_frame)
-        entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_2)
+            #Página 2
+            entrada_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+            entrada_label = customtkinter.CTkLabel(entrada_frame, text="Por favor, insira o CPF do Cliente", text_color="black", font=("Times New Roman", 16))
+            entrada = customtkinter.CTkEntry(entrada_frame, 250, 25, None, None, bg_color="white", text_color="black")
+            CPF_extraido = customtkinter.CTkLabel(entrada_frame)
+            entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_2)
 
-        #página 3
-        anexo_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
-        anexo_label = customtkinter.CTkLabel(anexo_frame, text="O Extrato de Empréstimos deve estar em .pdf e ser criado digitalmente", text_color="black", font=("Times New Roman", 16))
-        anexo_botao = customtkinter.CTkButton(anexo_frame, width=50, height=20, text="Anexar arquivo", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_3)
+            #página 3
+            anexo_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+            anexo_label = customtkinter.CTkLabel(anexo_frame, text="O Extrato de Empréstimos deve estar em .pdf e ser criado digitalmente", text_color="black", font=("Times New Roman", 16))
+            anexo_botao = customtkinter.CTkButton(anexo_frame, width=50, height=20, text="Anexar arquivo", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_3)
 
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
-    
+            app = App()
+            app.mainloop()
+
+def leitor_de_pdf(out_folder):
+    with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
+        # Variável para armazenar o texto filtrado
+        # Iterar pelas páginas do PDF
+        for page in pdf.pages:
+            # Extrair tabelas da página
+            for table in page.extract_tables():
+                # Pular cabeçalhos
+                for linha in table[2:]:
+                    # Verificar se a linha tem pelo menos 14 colunas
+                    if len(linha) > 13 and linha[2] == "Ativo":  # Coluna de situação (index 2)
+                        contrato = linha[0].replace('\n', '')    # Número do contrato
+                        banco = linha[1].replace('\n', '')       # Banco
+                        situacao = linha[2]                       # Situação (já é 'Ativo')
+                        data_inclusao = linha[4].replace('\n', '') # Data de inclusão (index 4)
+                        inicio_de_desconto = linha[5].replace('\n', '') # Data de inclusão (index 4)
+                        data_vencimento = linha[6].replace('\n', '') # Aqui deve estar a data no formato mm/yyyy
+                        data_vencimento_formatada = datetime.strptime(data_vencimento, '%m/%Y').strftime('%d/%m/%y')
+                        parcelas = int(linha[7].replace('\n', ''))    # Quantidade de parcelas
+                        valor_parcela = float(linha[8].replace('R$', '').replace('.', '').replace(',', '.').strip())  # Valor da parcela (index 8)
+                        valor_emprestado = float(linha[9].replace('.', '').replace(',', '.').replace('R$', '').strip())  # Valor emprestado (index 9)
+
+                        # Obter o último dia do mês para data_vencimento
+                        mes, ano = map(int, data_vencimento.split('/'))
+                        ultimo_dia_mes = calendar.monthrange(ano, mes)[1]
+                        data_vencimento_formatada = datetime.strptime(f"{ultimo_dia_mes}/{mes}/{ano}", '%d/%m/%Y')
+                        data_atual = datetime.now()
+
+                        # Calcular meses restantes usando relativedelta a partir da data atual
+                        diferenca = relativedelta(data_vencimento_formatada, data_atual)
+                        meses_restantes = diferenca.years * 12 + diferenca.months
+                        
+                        # Calcular o valor total pago considerando as parcelas
+                        valor_total_pago = parcelas*valor_parcela
+                        
+                        #calculo de taxa de juros
+                        taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
+                        
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
+                        
+                        # Calcular o valor de liquidação
+                        valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
+                        print(f"{taxa}")
+                        # Adicionar informações ao filtro
+                        dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
+                        print("processamento concluído!")
+
+
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
     Calcula a taxa de juros periódica usando o método de Newton-Raphson.
@@ -234,8 +279,6 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     --------
     float: Valor total a ser pago, considerando as parcelas restantes e a taxa de juros.
     """
-
-
     # Converter taxa de juros percentual para decimal
     taxa_juros_decimal = taxa_juros_mensal / 100
     
@@ -282,58 +325,12 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-
 dados_filtrados = []
-
 out_folder = start_gui()
+leitor_de_pdf(out_folder)
+
 print("Arquivo:", out_folder)
 
-
-with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
-    # Variável para armazenar o texto filtrado
-    # Iterar pelas páginas do PDF
-    for page in pdf.pages:
-        # Extrair tabelas da página
-        for table in page.extract_tables():
-            # Pular cabeçalhos
-            for linha in table[2:]:
-                # Verificar se a linha tem pelo menos 14 colunas
-                if len(linha) > 13 and linha[2] == "Ativo":  # Coluna de situação (index 2)
-                    contrato = linha[0].replace('\n', '')    # Número do contrato
-                    banco = linha[1].replace('\n', '')       # Banco
-                    situacao = linha[2]                       # Situação (já é 'Ativo')
-                    data_inclusao = linha[4].replace('\n', '') # Data de inclusão (index 4)
-                    inicio_de_desconto = linha[5].replace('\n', '') # Data de inclusão (index 4)
-                    data_vencimento = linha[6].replace('\n', '') # Aqui deve estar a data no formato mm/yyyy
-                    data_vencimento_formatada = datetime.strptime(data_vencimento, '%m/%Y').strftime('%d/%m/%y')
-                    parcelas = int(linha[7].replace('\n', ''))    # Quantidade de parcelas
-                    valor_parcela = float(linha[8].replace('R$', '').replace('.', '').replace(',', '.').strip())  # Valor da parcela (index 8)
-                    valor_emprestado = float(linha[9].replace('.', '').replace(',', '.').replace('R$', '').strip())  # Valor emprestado (index 9)
-
-                    # Obter o último dia do mês para data_vencimento
-                    mes, ano = map(int, data_vencimento.split('/'))
-                    ultimo_dia_mes = calendar.monthrange(ano, mes)[1]
-                    data_vencimento_formatada = datetime.strptime(f"{ultimo_dia_mes}/{mes}/{ano}", '%d/%m/%Y')
-                    data_atual = datetime.now()
-
-                    # Calcular meses restantes usando relativedelta a partir da data atual
-                    diferenca = relativedelta(data_vencimento_formatada, data_atual)
-                    meses_restantes = diferenca.years * 12 + diferenca.months
-                    
-                    # Calcular o valor total pago considerando as parcelas
-                    valor_total_pago = parcelas*valor_parcela
-                    
-                    #calculo de taxa de juros
-                    taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
-                    
-                    valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
-                    
-                    # Calcular o valor de liquidação
-                    valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
-                    print(f"{taxa}")
-                    # Adicionar informações ao filtro
-                    dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
-                    print("processamento concluído!")
 
 # Imprimir o cabeçalho da tabela original
 cabecalho_original = ['Número do Contrato', 'Banco de Origem', 'Situação', 'Início de Desconto', 'Data de Vencimento', 'PMT(R$)',  'Parcelas','Meses Restantes', 'Valor Emprestado (R$)', 'Taxa Original (%)', 'Valor de Liquidação(R$)']
