@@ -18,8 +18,163 @@ from scipy.optimize import fsolve
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
-from gui import start_gui
+# Bilioteca para UI
+import shutil
+import os
+from screeninfo import get_monitors
+import customtkinter
 
+# Obter informações sobre os monitores conectados
+monitors = get_monitors()
+
+# Se houver múltiplos monitores, escolher o monitor principal ou um específico
+monitor = monitors[0]  # Seleciona o monitor primário (primeiro monitor na lista)
+
+screen_width = monitor.width
+screen_height = monitor.height
+
+# Definir largura e altura da janela
+largura = monitor.width
+altura = monitor.height
+
+# Calcula a posição para centralizar a janela no monitor selecionado
+x = (screen_width // 2) - (largura // 2)
+y = (screen_height // 2) - (altura // 2)
+
+my_custom_theme = {
+    "primary_color": "#e3e9f0",      # Main color (Light Grayish Blue)
+        "color1": "#e4ebf1",         # Light Grayish Blue
+        "color2": "#11115c",         # Azul Banrisul (Dark Blue)
+        "color3": "#95a6ba",         # Cinza (Gray)
+        "color4": "#908682",         # Olive Gray
+        "color5": "#bfbbb6",         # Light Taupe
+        "color6": "#7d678f",         # Purple Gray
+        "color7": "#b8c2d1",         # Cinza Médio (Medium Gray)
+        "color8": "#c4c3c6",         # Light Silver
+        "color9": "#aea0ac",         # Lavender Gray
+        "color10": "#6c8cac",        # Slate Blue
+
+}
+
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
+
+        # Variável de controle para armazenar o nome da pasta
+        
+        result = customtkinter.StringVar()
+
+        def gravar_cpf():
+            CPF = entrada.get()
+            CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
+            nome_da_pasta = str(CPF)
+            if not len(nome_da_pasta):
+                nome_da_pasta = "saida"
+            try:
+                os.makedirs(nome_da_pasta)
+                print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
+            except FileExistsError:
+                print(f"A pasta '{nome_da_pasta}' já existe.")
+            result.set(nome_da_pasta)
+            return nome_da_pasta
+
+
+        def selecionar_arquivo():
+            arquivo_pdf = customtkinter.filedialog.askopenfile(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
+
+            if arquivo_pdf:
+                print(f"Arquivo selecionado: {arquivo_pdf}")
+                nome_da_pasta = gravar_cpf()  # A pasta é criada e seu nome é retornado
+                caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
+
+                try:
+                    shutil.copy(arquivo_pdf.name, caminho_destino)  # Certifique-se de usar o 'name' do arquivo
+                    print(f"Arquivo copiado para: {caminho_destino}")
+                except Exception as e:
+                    print(f"Ocorreu um erro ao copiar o arquivo: {e}")
+            else:
+                print("Nenhum arquivo foi selecionado.")
+
+        def ocultar_1():
+            welcome_frame.place_forget()
+            botao.place_forget()
+            
+            # Configurar a janela para usar grid
+            entrada_frame.place(x=largura/2 -150, y= 550)
+            entrada_label.pack()
+            entrada.pack()
+            entrada_botao.pack()
+
+        def ocultar_2():
+            gravar_cpf()
+            entrada_frame.place(x=largura+500, y= 50)
+            anexo_frame.place(x=largura/2 -250, y= 550)
+            anexo_label.pack()
+            anexo_botao.pack()
+
+        def ocultar_3():
+            selecionar_arquivo()
+            anexo_frame.place_forget()
+
+
+
+
+        # configure window
+        self.title("Calculadora de Portabilidade")
+        self.geometry(f'{largura}x{altura}+{x}+{y}')
+        self.configure(fg_color=my_custom_theme["primary_color"])  # Light Grayish Blue
+
+        linhas_frame = customtkinter.CTkFrame(self, fg_color=None, width=largura, height=75)
+        linhas_frame.place(x=0,y=0)
+        # Create the canvas_1
+        canvas_1 = customtkinter.CTkCanvas(linhas_frame, width=largura, height=100)
+        canvas_1.pack()
+        # Draw the first rectangle with color1
+        canvas_1.create_rectangle(0, 0, largura, 25, outline="", width=3, fill="white")
+        # Draw the second rectangle with color2
+        canvas_1.create_rectangle(0, 25, largura, 75, outline="", width=3, fill=my_custom_theme["color2"])
+        # Draw the third rectangle with color3
+        canvas_1.create_rectangle(0, 75, largura, 100, outline="", width=3, fill=my_custom_theme["color8"])
+
+
+        canvas_2 = customtkinter.CTkCanvas(self, width=largura, height=150)
+        canvas_2.place(x= 20, y=500, width=largura-20, height=150)
+        # Draw the first rectangle with color1
+        canvas_2.create_rectangle(0, 0, largura-50, 25, outline="", width=3, fill="white")
+        canvas_2.create_rectangle(0, 30, largura-50, 150, outline="", width=3, fill="white")
+
+        #Draw the text
+        # texto_1 = customtkinter.CTkLabel(self, largura, 25, text_color="black", text="Bem vindo ao app")
+
+        # Create the initial page (Welcome page)
+        welcome_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=150)
+        welcome_frame.place(x= largura/2.7, y=550)
+
+        welcome_text_1 = customtkinter.CTkLabel(welcome_frame, text="Seja bem vindo à", text_color="black", font=("Times New Roman", 16))
+        welcome_text_1.pack()  # Add padding around the label
+        welcome_text_2 = customtkinter.CTkLabel(welcome_frame, text="Calculadora de Saldo de Liquidação de Portabilidades", text_color="#5bc2e7", font=("Times New Roman", 20))
+        welcome_text_2.pack()  # Add padding around the label
+
+        # Botão para mudar para outra página
+        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_1)
+        botao.place(x=0,y=2)
+
+        #Página 2
+        entrada_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+        entrada_label = customtkinter.CTkLabel(entrada_frame, text="Por favor, insira o CPF do Cliente", text_color="black", font=("Times New Roman", 16))
+        entrada = customtkinter.CTkEntry(entrada_frame, 250, 25, None, None, bg_color="white", text_color="black")
+        CPF_extraido = customtkinter.CTkLabel(entrada_frame)
+        entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_2)
+
+        #página 3
+        anexo_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+        anexo_label = customtkinter.CTkLabel(anexo_frame, text="O Extrato de Empréstimos deve estar em .pdf e ser criado digitalmente", text_color="black", font=("Times New Roman", 16))
+        anexo_botao = customtkinter.CTkButton(anexo_frame, width=50, height=20, text="Anexar arquivo", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_3)
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+    
 def calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01):
     """
     Calcula a taxa de juros periódica usando o método de Newton-Raphson.
