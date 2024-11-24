@@ -1,4 +1,6 @@
-import tkinter as tk
+import shutil
+import os
+from tkinter import filedialog
 from screeninfo import get_monitors
 import customtkinter
 
@@ -34,31 +36,36 @@ my_custom_theme = {
 
 }
 
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
+        
+        # Função para ocultar os frames
+        def ocultar_frames():
+            for frame in frames:
+                frame.place_forget()
 
         # configure window
-        self.title("CustomTkinter complex_example.py")
+        self.title("Calculadora de Portabilidade")
         self.geometry(f'{largura}x{altura}+{x}+{y}')
         self.configure(fg_color=my_custom_theme["primary_color"])  # Light Grayish Blue
 
+        linhas_frame = customtkinter.CTkFrame(self, fg_color=None, width=largura, height=75)
+        linhas_frame.place(x=0,y=0)
         # Create the canvas_1
-        canvas_1 = customtkinter.CTkCanvas(self, width=largura, height=100)
+        canvas_1 = customtkinter.CTkCanvas(linhas_frame, width=largura, height=100)
         canvas_1.pack()
-
         # Draw the first rectangle with color1
         canvas_1.create_rectangle(0, 0, largura, 25, outline="", width=3, fill="white")
-
         # Draw the second rectangle with color2
         canvas_1.create_rectangle(0, 25, largura, 75, outline="", width=3, fill=my_custom_theme["color2"])
-
         # Draw the third rectangle with color3
         canvas_1.create_rectangle(0, 75, largura, 100, outline="", width=3, fill=my_custom_theme["color8"])
 
+
         canvas_2 = customtkinter.CTkCanvas(self, width=largura, height=150)
         canvas_2.place(x= 20, y=500, width=largura-20, height=150)
-
         # Draw the first rectangle with color1
         canvas_2.create_rectangle(0, 0, largura-50, 25, outline="", width=3, fill="white")
         canvas_2.create_rectangle(0, 30, largura-50, 150, outline="", width=3, fill="white")
@@ -66,6 +73,7 @@ class App(customtkinter.CTk):
         #Draw the text
         # texto_1 = customtkinter.CTkLabel(self, largura, 25, text_color="black", text="Bem vindo ao app")
 
+        # Create the initial page (Welcome page)
         welcome_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=150)
         welcome_frame.place(x= largura/2.7, y=550)
 
@@ -74,9 +82,11 @@ class App(customtkinter.CTk):
         welcome_text_2 = customtkinter.CTkLabel(welcome_frame, text="Calculadora de Saldo de Liquidação de Portabilidades", text_color="#5bc2e7", font=("Times New Roman", 20))
         welcome_text_2.pack()  # Add padding around the label
 
-        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black")
+        # Botão para mudar para outra página
+        botao = customtkinter.CTkButton(self, text="Calcular Saldo de Liquidação", width=50, height=20, fg_color="white", text_color="black", command=ocultar_frames)
         botao.place(x=0,y=2)
-
+        frames = [welcome_frame, canvas_2, botao]
+        
 if __name__ == "__main__":
     app = App()
     app.mainloop()
