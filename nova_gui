@@ -45,7 +45,10 @@ class App(customtkinter.CTk):
         result = customtkinter.StringVar()
 
         def gravar_cpf():
-            CPF = entrada.get()
+            CPF = entrada.get().strip()  # Remove espaços extras
+            if not CPF:
+                print("CPF não fornecido.")
+                return  # Não continua sem CPF
             CPF_extraido.configure(text=f"CPF Registrado: {CPF}")
             nome_da_pasta = str(CPF)
             if not len(nome_da_pasta):
@@ -57,6 +60,26 @@ class App(customtkinter.CTk):
                 print(f"A pasta '{nome_da_pasta}' já existe.")
             result.set(nome_da_pasta)
             return nome_da_pasta
+
+
+        def selecionar_arquivo():
+            arquivo_pdf = customtkinter.filedialog.askopenfile(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
+
+            if arquivo_pdf:
+                print(f"Arquivo selecionado: {arquivo_pdf}")
+                nome_da_pasta = gravar_cpf()  # A pasta é criada e seu nome é retornado
+                if not os.path.exists(nome_da_pasta):
+                    print(f"A pasta de destino não existe: {nome_da_pasta}")
+                    return
+                caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
+
+                try:
+                    shutil.copy(arquivo_pdf.name, caminho_destino)  # Certifique-se de usar o 'name' do arquivo
+                    print(f"Arquivo copiado para: {caminho_destino}")
+                except Exception as e:
+                    print(f"Ocorreu um erro ao copiar o arquivo: {e}")
+            else:
+                print("Nenhum arquivo foi selecionado.")
 
         def ocultar_1():
             welcome_frame.place_forget()
@@ -71,6 +94,13 @@ class App(customtkinter.CTk):
         def ocultar_2():
             gravar_cpf()
             entrada_frame.destroy()
+            anexo_frame.place(x=largura/2 -250, y= 550)
+            anexo_label.pack()
+            anexo_botao.pack()
+
+        def ocultar_3():
+            selecionar_arquivo()
+            anexo_frame.place_forget()
 
 
 
@@ -123,6 +153,9 @@ class App(customtkinter.CTk):
         entrada_botao = customtkinter.CTkButton(entrada_frame, width=50, height=20, text="Gravar CPF", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_2)
 
         #página 3
+        anexo_frame = customtkinter.CTkFrame(self, fg_color="white", width=largura-40, height=500)
+        anexo_label = customtkinter.CTkLabel(anexo_frame, text="O Extrato de Empréstimos deve estar em .pdf e ser criado digitalmente", text_color="black", font=("Times New Roman", 16))
+        anexo_botao = customtkinter.CTkButton(anexo_frame, width=50, height=20, text="Anexar arquivo", fg_color= my_custom_theme["color10"], text_color="black", command=ocultar_3)
 
 if __name__ == "__main__":
     app = App()
