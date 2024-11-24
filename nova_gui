@@ -36,6 +36,7 @@ my_custom_theme = {
 }
 
 
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__() #When you use super().__init__() in a subclass, you're calling the __init__() method of the parent class, allowing the child class to properly initialize the inherited attributes and perform any setup that the parent class requires. 
