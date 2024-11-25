@@ -56,6 +56,8 @@ my_custom_theme = {
 
 }
 
+dados_filtrados = []
+
 def start_gui():
     class App(customtkinter.CTk):
         def __init__(self):
@@ -171,6 +173,9 @@ def start_gui():
 
             app = App()
             app.mainloop()
+
+
+out_folder = start_gui()
 
 def leitor_de_pdf(out_folder):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
@@ -325,8 +330,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-dados_filtrados = []
-out_folder = start_gui()
 leitor_de_pdf(out_folder)
 
 print("Arquivo:", out_folder)
