@@ -113,7 +113,7 @@ def start_gui():
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
                         text="Next page",
-                        command=show_next_frame,
+                        command=show_next_frame
                     )  # Cria o botão "Next Page" para o novo frame
                 else:
                     forward_button = customtkinter.CTkButton(
@@ -121,7 +121,7 @@ def start_gui():
                         text="Processar arquivo",
                         command=close_window,
                     )  # Cria o botão "Next Page" para o novo frame
-                forward_button.pack(pady=20)
+                forward_button.pack(pady=300, side="bottom", anchor="n")
 
             def close_window():
                 self.destroy()  # This closes the window
@@ -148,9 +148,9 @@ def start_gui():
                 self.lista_de_frames[0]
             )  # Desenha o cabeçalho no primeiro frame
             label_1 = customtkinter.CTkLabel(
-                self.lista_de_frames[0], text="Home Page", font=("Arial", 20)
+                self.lista_de_frames[0], text="Calculadora de Portabilidade", font=("Arial", 40)
             )
-            label_1.pack(pady=20)
+            label_1.pack(pady=300, side = "top", anchor = "s")
 
             # --- Frame 2: Identificação do cliente ---
             draw_header(self.lista_de_frames[1])  # Desenha o cabeçalho no segundo frame
@@ -194,7 +194,7 @@ def start_gui():
                 text="Next page",
                 command=show_next_frame,
             )
-            forward_button.pack(pady=20)
+            forward_button.pack(pady=50, side="bottom", anchor="n")
 
     app = App()
     app.mainloop()
