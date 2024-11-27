@@ -37,74 +37,70 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         #Definig the frames
-        frame_1 = customtkinter.CTkFrame(self)
-        frame_2 = customtkinter.CTkFrame(self)
-        frame_3 = customtkinter.CTkFrame(self)
-        frame_4 = customtkinter.CTkFrame(self)
+        self.lista_de_frames = [
+            customtkinter.CTkFrame(self),
+            customtkinter.CTkFrame(self),
+            customtkinter.CTkFrame(self),
+            customtkinter.CTkFrame(self),
+        ]
 
-        # Function to hide all frames
+        self.frame_atual = 0
+
+        # Função para esconder todos os frames
         def hide_all_frames():
-            frame_1.pack_forget()
-            frame_2.pack_forget()
-            frame_3.pack_forget()
-            frame_4.pack_forget()
+            for frame in self.lista_de_frames:
+                frame.pack_forget()
 
-        # Function to show frame1
-        def show_frame_1():
-            hide_all_frames()
-            frame_1.pack(fill="both", expand=True)
+        # Função para exibir o próximo frame
+        def show_next_frame():
+            hide_all_frames()  # Esconde todos os frames
+            self.frame_atual = (self.frame_atual + 1) % len(self.lista_de_frames)  # Avança para o próximo frame (circular)
+            self.lista_de_frames[self.frame_atual].pack(fill="both", expand=True)  # Exibe o próximo frame
+            if self.frame_atual <= 2:
+                forward_button = customtkinter.CTkButton(self.lista_de_frames[self.frame_atual], text="Next page", command=show_next_frame)# Cria o botão "Next Page" para o novo frame
+            else:
+                forward_button = customtkinter.CTkButton(self.lista_de_frames[self.frame_atual], text="Processar arquivo", command=close_window)# Cria o botão "Next Page" para o novo frame
+            forward_button.pack(pady=20)
 
-                # Function to show frame1
-        def show_frame_2():
-            hide_all_frames()
-            frame_2.pack(fill="both", expand=True)
-
-                # Function to show frame1
-        def show_frame_3():
-            hide_all_frames()
-            frame_3.pack(fill="both", expand=True)
-
-        def show_frame_4():
-            hide_all_frames()
-            frame_4.pack(fill="both", expand=True)
 
         def close_window():
             self.destroy()  # This closes the window
 
+        # Função para desenhar as barrinhas no topo (cabeçalho)
+        def draw_header(frame):
+            canvas = customtkinter.CTkCanvas(frame, width=screen_width, height=75)
+            canvas.pack()
+            canvas.create_rectangle(0, 0, screen_width, 25, fill="#e4ebf1")  # Retângulo azul
+            canvas.create_rectangle(0, 25, screen_width, 50, fill="#11115c")  # Retângulo vermelho
+            canvas.create_rectangle(0, 50, screen_width, 75, fill="#95a6ba")  # Retângulo preto
+
+
+        # Show the first frame initially
+        self.lista_de_frames[0].pack(fill="both", expand=True)
+
         # --- Frame 1: Home Page ---
-        label_1 = customtkinter.CTkLabel(frame_1, text="Home Page", font=("Arial", 20))
+        draw_header(self.lista_de_frames[0])  # Desenha o cabeçalho no primeiro frame
+        label_1 = customtkinter.CTkLabel(self.lista_de_frames[0], text="Home Page", font=("Arial", 20))
         label_1.pack(pady=20)
 
         # --- Frame 2: Identificação do cliente ---
-        label_2 = customtkinter.CTkLabel(frame_2, text="Digitar CPF", font=("Arial", 20))
+        draw_header(self.lista_de_frames[1])  # Desenha o cabeçalho no segundo frame
+        label_2 = customtkinter.CTkLabel(self.lista_de_frames[1], text="Digitar CPF", font=("Arial", 20))
         label_2.pack(pady=20)
 
         # --- Frame 3: Selecionar arquivo ---
-        label_3 = customtkinter.CTkLabel(frame_3, text="Anexar PDF", font=("Arial", 20))
+        draw_header(self.lista_de_frames[2])  # Desenha o cabeçalho no terceiro frame
+        label_3 = customtkinter.CTkLabel(self.lista_de_frames[2], text="Anexar PDF", font=("Arial", 20))
         label_3.pack(pady=20)
 
         # --- Frame 4: Processar arquivo ---
-        label_4 = customtkinter.CTkLabel(frame_4, text="Processar arquivo", font=("Arial", 20))
+        draw_header(self.lista_de_frames[3])  # Desenha o cabeçalho no quarto frame
+        label_4 = customtkinter.CTkLabel(self.lista_de_frames[3], text="Processar arquivo", font=("Arial", 20))
         label_4.pack(pady=20)
 
-        #Pass the frames
-        foward_button_1 = customtkinter.CTkButton(frame_1, text="Next page", command=show_frame_2)
-        foward_button_1.pack()
-
-        #Pass the frames
-        foward_button_2 = customtkinter.CTkButton(frame_2, text="Next page", command=show_frame_3)
-        foward_button_2.pack()
-
-        #Pass the frames
-        foward_button_3 = customtkinter.CTkButton(frame_3, text="Next page", command=show_frame_4)
-        foward_button_3.pack()
-        
-        #Pass the frames
-        foward_button_4 = customtkinter.CTkButton(frame_4, text="Process archive", command=close_window)
-        foward_button_4.pack()
-
-        # Show the first frame initially
-        show_frame_1()
+        # Cria o botão "Next Page" para o primeiro frame
+        forward_button = customtkinter.CTkButton(self.lista_de_frames[self.frame_atual], text="Next page", command=show_next_frame)
+        forward_button.pack(pady=20)
 
 if __name__ == "__main__":
     app = App()
