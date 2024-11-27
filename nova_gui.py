@@ -46,6 +46,45 @@ class App(customtkinter.CTk):
 
         self.frame_atual = 0
 
+        # Criar a variável result após a criação da janela
+        result = customtkinter.StringVar()
+
+        def selecionar_arquivo_pdf():
+            global caminho_destino
+            arquivo_pdf = customtkinter.filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
+
+            if arquivo_pdf:
+                print(f"Arquivo selecionado: {arquivo_pdf}")
+                nome_da_pasta = gravar_texto()  # A pasta é criada e seu nome é retornado
+
+                if not os.path.exists(nome_da_pasta):
+                    print(f"A pasta de destino não existe: {nome_da_pasta}")
+                    return
+
+                caminho_destino = os.path.join(nome_da_pasta, "consignado.pdf")
+
+                try:
+                    shutil.copy(arquivo_pdf, caminho_destino)
+                    print(f"Arquivo copiado para: {caminho_destino}")
+                except Exception as e:
+                    print(f"Ocorreu um erro ao copiar o arquivo: {e}")
+            else:
+                print("Nenhum arquivo foi selecionado.")
+
+        def gravar_texto():
+            cpf = entrada.get()
+            print(cpf)
+            nome_da_pasta = str(cpf)
+            if not len(nome_da_pasta):
+                nome_da_pasta = "saida"
+            try:
+                os.makedirs(nome_da_pasta)
+                print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
+            except FileExistsError:
+                print(f"A pasta '{nome_da_pasta}' já existe.")
+            result.set(nome_da_pasta)
+            return nome_da_pasta
+    
         # Função para esconder todos os frames
         def hide_all_frames():
             for frame in self.lista_de_frames:
@@ -85,8 +124,11 @@ class App(customtkinter.CTk):
 
         # --- Frame 2: Identificação do cliente ---
         draw_header(self.lista_de_frames[1])  # Desenha o cabeçalho no segundo frame
-        label_2 = customtkinter.CTkLabel(self.lista_de_frames[1], text="Digitar CPF", font=("Arial", 20))
+        label_2 = customtkinter.CTkLabel(self.lista_de_frames[1], text="Digite o CPF", font=("Arial", 20))
         label_2.pack(pady=20)
+        # Campo de entrada (Entry)
+        entrada = customtkinter.CTkEntry(self.lista_de_frames[1])
+        entrada.pack()
 
         # --- Frame 3: Selecionar arquivo ---
         draw_header(self.lista_de_frames[2])  # Desenha o cabeçalho no terceiro frame
