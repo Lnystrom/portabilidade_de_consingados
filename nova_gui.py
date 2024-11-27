@@ -129,6 +129,9 @@ class App(customtkinter.CTk):
         # Campo de entrada (Entry)
         entrada = customtkinter.CTkEntry(self.lista_de_frames[1])
         entrada.pack()
+        cpf_botao = customtkinter.CTkButton(self.lista_de_frames[1], text="Gravar cpf", command=gravar_texto)
+        cpf_botao.pack()
+
 
         # --- Frame 3: Selecionar arquivo ---
         draw_header(self.lista_de_frames[2])  # Desenha o cabeçalho no terceiro frame
