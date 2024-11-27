@@ -47,7 +47,7 @@ def start_gui():
             self.frame_atual = 0
 
             # Criar a variável result após a criação da janela
-            result = customtkinter.StringVar()
+            self.result = customtkinter.StringVar()
 
             def selecionar_arquivo_pdf():
                 global caminho_destino
@@ -82,7 +82,7 @@ def start_gui():
                     print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
                 except FileExistsError:
                     print(f"A pasta '{nome_da_pasta}' já existe.")
-                result.set(nome_da_pasta)
+                self.result.set(nome_da_pasta)
                 return nome_da_pasta
         
             # Função para esconder todos os frames
@@ -149,7 +149,7 @@ def start_gui():
             forward_button = customtkinter.CTkButton(self.lista_de_frames[self.frame_atual], text="Next page", command=show_next_frame)
             forward_button.pack(pady=20)
 
-            return result.get()
+            return self.result.get()
     
     if __name__ == "__main__":
         app = App()
