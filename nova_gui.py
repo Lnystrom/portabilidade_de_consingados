@@ -197,6 +197,11 @@ def start_gui():
             )
             forward_button.pack(pady=50, side="bottom", anchor="n")
 
-    app = App()
-    app.mainloop()
-    return app.result.get()
+            return self.result.get()
+        
+    if __name__ == "__main__":
+        app = App()
+        app.mainloop()
+        out_folder = start_gui()
+        print(f"Resultado da pasta de destino: {out_folder}")
+        
