@@ -4,6 +4,7 @@ import customtkinter
 from screeninfo import get_monitors
 
 
+
 def start_gui():
     customtkinter.set_appearance_mode(
         "System"
