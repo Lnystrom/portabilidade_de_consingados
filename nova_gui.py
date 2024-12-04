@@ -205,3 +205,4 @@ def start_gui():
         out_folder = start_gui()
         print(f"Resultado da pasta de destino: {out_folder}")
         
+        
