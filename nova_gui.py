@@ -344,8 +344,7 @@ def start_gui():
                 forward_button.pack(pady=300, side="bottom", anchor="n")
 
             def executar_funções():
-                calcular_taxa(out_folder)
-                calcular_liquidacao(out_folder)
+                calcular_liquidacao()
                 #self.destroy()  # This closes the window
 
             # Função para desenhar as barrinhas no topo (cabeçalho)
