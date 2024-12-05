@@ -299,6 +299,8 @@ def start_gui():
                 except FileExistsError:
                     print(f"A pasta '{nome_da_pasta}' já existe.")
                 self.result.set(nome_da_pasta)
+                global first_table
+                first_table = False
                 return nome_da_pasta
 
             # Função para esconder todos os frames
@@ -402,11 +404,9 @@ def start_gui():
             )
             forward_button.pack(pady=50, side="bottom", anchor="n")
 
-            if first_table == True:
-                out_folder = 'padrao'
-            else:
-                out_folder = self.result.get()
+            out_folder = "padrao" if first_table else self.result.get()
 
+            ler_pdf(out_folder)
         
     app = App()
     app.mainloop()
