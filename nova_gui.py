@@ -177,7 +177,19 @@ def ler_pdf(out_folder):
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
                         print(f"{taxa}")
                         # Adicionar informações ao filtro
-                        dados_filtrados.append([contrato, banco, situacao, inicio_de_desconto, str(data_vencimento), valor_parcela, parcelas, meses_restantes, valor_emprestado, taxa, valor_liquidacao])
+                        dados_filtrados.append({
+                            "contrato": contrato,
+                            "banco": banco,
+                            "situacao": situacao,
+                            "inicio_de_desconto": inicio_de_desconto,
+                            "data_vencimento": str(data_vencimento),
+                            "valor_parcela": valor_parcela,
+                            "parcelas": parcelas,
+                            "meses_restantes": meses_restantes,
+                            "valor_emprestado": valor_emprestado,
+                            "taxa": taxa,
+                            "valor_liquidacao": valor_liquidacao
+                        })
                         print("processamento concluído!")
 
 def imprimir_resultados(out_folder):
@@ -327,12 +339,14 @@ def start_gui():
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
                         text="Processar arquivo",
-                        command=close_window,
+                        command=executar_funções,
                     )  # Cria o botão "Next Page" para o novo frame
                 forward_button.pack(pady=300, side="bottom", anchor="n")
 
-            def close_window():
-                self.destroy()  # This closes the window
+            def executar_funções():
+                calcular_taxa(out_folder)
+                calcular_liquidacao(out_folder)
+                #self.destroy()  # This closes the window
 
             # Função para desenhar as barrinhas no topo (cabeçalho)
             def draw_header(frame):
@@ -404,9 +418,11 @@ def start_gui():
             )
             forward_button.pack(pady=50, side="bottom", anchor="n")
 
-            out_folder = "padrao" if first_table else self.result.get()
-
-            ler_pdf(out_folder)
+            if first_table == True:
+                out_folder = "padrao"
+            else: 
+                self.result.get()
+                ler_pdf(out_folder)
         
     app = App()
     app.mainloop()
