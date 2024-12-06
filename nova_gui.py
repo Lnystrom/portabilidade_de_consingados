@@ -97,7 +97,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, frame_atual):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado):
     """
     Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
     
@@ -118,22 +118,29 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, f
     """
 
     if valor_emprestado <= 0 or taxa <= 1.3:
-        print("Os dados fornecidos são inválidos.")
-        
+        # print("Os dados fornecidos são inválidos.")
+        label_erro.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
+        label_erro.pack(pady=100, side='top', anchor='s')
+
+
         # Solicita novamente o valor emprestado até ser válido
         while valor_emprestado <= 0 or taxa <= 1.3:
-            try:
-                valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
+            # try:
+                # valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
+                entry_valor_emprestado.pack(padx=20, pady=10)
+                valor_emprestado = float(entry_valor_emprestado.get())
                 taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                 if valor_emprestado <= 0:
                     print("Valor emprestado deve ser maior que 0.")
-            except ValueError:
-                print("Por favor, insira um número válido para o valor emprestado.")
+                    entry_valor_emprestado.delete(0, customtkinter.END)
+            # except ValueError:
+            #     print("Por favor, insira um número válido para o valor emprestado.")
+            #     entry_valor_emprestado.delete(0, customtkinter.END)
     
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-def ler_pdf(out_folder, frame_atual):
+def ler_pdf(out_folder, label, entrada_verificar):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
@@ -171,7 +178,7 @@ def ler_pdf(out_folder, frame_atual):
                         #calculo de taxa de juros
                         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                         
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, frame_atual)
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar)
                         
                         # Calcular o valor de liquidação
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
@@ -312,7 +319,7 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                 show_next_frame()
-                ler_pdf(out_folder, self.frame_atual)
+                ler_pdf(out_folder, label_6, entrada_verificar)
 
                 #self.destroy()  # This closes the window
 
@@ -421,6 +428,16 @@ def start_gui():
                 self.lista_de_frames[4], text="Correção de Dados", font=("Arial", 20)
             )
             label_5.pack(pady=20)
+
+            label_6 = customtkinter.CTkLabel(
+                self.lista_de_frames[4], font=("Arial", 20)
+            )
+
+            entrada_verificar = customtkinter.CTkEntry(
+                self.lista_de_frames[4],
+                placeholder_text="Informe o valor emprestado"
+            )
+
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
