@@ -301,6 +301,7 @@ def start_gui():
                 self.result.set(nome_da_pasta)
                 global first_table
                 first_table = False
+                cpf_botao.configure(state='disabled')
                 return nome_da_pasta
 
             def executar_funções():
