@@ -253,6 +253,7 @@ def start_gui():
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
+                customtkinter.CTkFrame(self)
             ]
 
             self.frame_atual = 0
@@ -310,7 +311,9 @@ def start_gui():
                     out_folder = "padrao"
                 else: 
                     out_folder = self.result.get()
+                show_next_frame()
                 ler_pdf(out_folder)
+
                 #self.destroy()  # This closes the window
 
             # Função para esconder todos os frames
@@ -333,12 +336,20 @@ def start_gui():
                         text="Next page",
                         command=show_next_frame
                     )  # Cria o botão "Next Page" para o novo frame
-                else:
+                if self.frame_atual == 3:
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
                         text="Processar arquivo",
                         command=executar_funções,
                     )  # Cria o botão "Next Page" para o novo frame
+                
+                else:
+                    forward_button = customtkinter.CTkButton(
+                        self.lista_de_frames[self.frame_atual],
+                        text="Processar arquivo",
+                        command=show_next_frame,
+                    )  # Cria o botão "Next Page" para o novo frame
+
                 forward_button.pack(pady=300, side="bottom", anchor="n")
 
 
