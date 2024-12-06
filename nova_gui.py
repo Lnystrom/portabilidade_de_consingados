@@ -343,7 +343,7 @@ def start_gui():
                         command=executar_funções,
                     )  # Cria o botão "Next Page" para o novo frame
                 
-                else:
+                if self.frame_atual == 4:
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
                         text="Processar arquivo",
@@ -414,6 +414,13 @@ def start_gui():
                 self.lista_de_frames[3], text="Processar arquivo", font=("Arial", 20)
             )
             label_4.pack(pady=20)
+
+            # --- Frame 5: Correção de dados ---
+            draw_header(self.lista_de_frames[4])  # Desenha o cabeçalho no quarto frame
+            label_5 = customtkinter.CTkLabel(
+                self.lista_de_frames[4], text="Correção de Dados", font=("Arial", 20)
+            )
+            label_5.pack(pady=20)
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
