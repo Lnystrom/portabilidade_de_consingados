@@ -97,7 +97,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, frame_atual):
     """
     Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
     
@@ -133,7 +133,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato):
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-def ler_pdf(out_folder):
+def ler_pdf(out_folder, frame_atual):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
@@ -171,7 +171,7 @@ def ler_pdf(out_folder):
                         #calculo de taxa de juros
                         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                         
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato)
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, frame_atual)
                         
                         # Calcular o valor de liquidação
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
@@ -312,7 +312,7 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                 show_next_frame()
-                ler_pdf(out_folder)
+                ler_pdf(out_folder, self.frame_atual)
 
                 #self.destroy()  # This closes the window
 
