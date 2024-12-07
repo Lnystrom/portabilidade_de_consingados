@@ -121,21 +121,17 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
         # print("Os dados fornecidos são inválidos.")
         label_erro.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
         label_erro.pack(pady=50, side='top', anchor='s')
-
-        
+        entry_valor_emprestado.pack()
+        botao.pack(pady=50)
 
         # Solicita novamente o valor emprestado até ser válido
         while valor_emprestado <= 0 or taxa <= 1.3:
             # try:
                 # valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
-                
-                entry_valor_emprestado.pack()
-                botao.pack(pady=50)
-                
                 taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
-                if valor_emprestado <= 0:
-                    print("Valor emprestado deve ser maior que 0.")
-                    entry_valor_emprestado.delete(0, customtkinter.END)
+                print("Valor emprestado deve ser maior que 0.")
+                # entry_valor_emprestado.delete(0, customtkinter.END)
+
             # except ValueError:
             #     print("Por favor, insira um número válido para o valor emprestado.")
             #     entry_valor_emprestado.delete(0, customtkinter.END)
@@ -459,7 +455,7 @@ def start_gui():
                 text="Next page",
                 command=show_next_frame,
             )
-            forward_button.pack(pady=50, side="bottom", anchor="n")
+            forward_button.pack()#pady=250, side="bottom", anchor="n"
         
     app = App()
     app.mainloop()
