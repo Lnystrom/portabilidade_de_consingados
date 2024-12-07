@@ -97,7 +97,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado, botao):
     """
     Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
     
@@ -120,15 +120,18 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
     if valor_emprestado <= 0 or taxa <= 1.3:
         # print("Os dados fornecidos são inválidos.")
         label_erro.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
-        label_erro.pack(pady=100, side='top', anchor='s')
+        label_erro.pack(pady=50, side='top', anchor='s')
 
+        
 
         # Solicita novamente o valor emprestado até ser válido
         while valor_emprestado <= 0 or taxa <= 1.3:
             # try:
                 # valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
-                entry_valor_emprestado.pack(padx=20, pady=10)
-                valor_emprestado = float(entry_valor_emprestado.get())
+                
+                entry_valor_emprestado.pack()
+                botao.pack(pady=50)
+                
                 taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                 if valor_emprestado <= 0:
                     print("Valor emprestado deve ser maior que 0.")
@@ -136,11 +139,11 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
             # except ValueError:
             #     print("Por favor, insira um número válido para o valor emprestado.")
             #     entry_valor_emprestado.delete(0, customtkinter.END)
-    
+        
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-def ler_pdf(out_folder, label, entrada_verificar):
+def ler_pdf(out_folder, label, entrada_verificar, botao):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
@@ -178,7 +181,7 @@ def ler_pdf(out_folder, label, entrada_verificar):
                         #calculo de taxa de juros
                         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                         
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar)
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar, botao)
                         
                         # Calcular o valor de liquidação
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
@@ -267,6 +270,7 @@ def start_gui():
 
             # Criar a variável result após a criação da janela
             self.result = customtkinter.StringVar()
+            self.novo_valor_emprestado = customtkinter.StringVar()
 
             def selecionar_arquivo_pdf():
                 global caminho_destino
@@ -312,6 +316,14 @@ def start_gui():
                 cpf_botao.configure(state='disabled')
                 return nome_da_pasta
 
+            def gravar_valor_emprestado():
+                valor_emprestado = entrada_verificar.get()
+                print(valor_emprestado)
+                new_valor_emprestado = float(valor_emprestado)
+                self.novo_valor_emprestado.set(new_valor_emprestado)
+
+                return valor_emprestado
+
             def executar_funções():
                 global first_table
                 if first_table == True:
@@ -319,7 +331,7 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                 show_next_frame()
-                ler_pdf(out_folder, label_6, entrada_verificar)
+                ler_pdf(out_folder, label_6, entrada_verificar, valor_emprestado_botao)
 
                 #self.destroy()  # This closes the window
 
@@ -357,7 +369,7 @@ def start_gui():
                         command=show_next_frame,
                     )  # Cria o botão "Next Page" para o novo frame
 
-                forward_button.pack(pady=300, side="bottom", anchor="n")
+                forward_button.pack(pady=200, side="bottom", anchor="n")
 
 
             # Função para desenhar as barrinhas no topo (cabeçalho)
@@ -392,6 +404,7 @@ def start_gui():
                 self.lista_de_frames[1], text="Digite o CPF", font=("Arial", 20)
             )
             label_2.pack(pady=20)
+            
             # Campo de entrada (Entry)
             entrada = customtkinter.CTkEntry(self.lista_de_frames[1])
             entrada.pack()
@@ -438,6 +451,9 @@ def start_gui():
                 placeholder_text="Informe o valor emprestado"
             )
 
+            valor_emprestado_botao = customtkinter.CTkButton(
+                self.lista_de_frames[4], text="alterar valor liberado", command=gravar_valor_emprestado, width=100
+            )
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
