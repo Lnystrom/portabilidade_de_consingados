@@ -97,7 +97,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado, botao):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado, botao, novo_valor_emprestado):
     """
     Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
     
@@ -117,19 +117,21 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
     tuple: Tupla contendo o valor emprestado e a taxa corrigidos, caso necessário.
     """
 
-    if valor_emprestado <= 0 or taxa <= 1.3:
+    while valor_emprestado <= 0 or taxa <= 1.3:
         # print("Os dados fornecidos são inválidos.")
         label_erro.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
         label_erro.pack(pady=50, side='top', anchor='s')
         entry_valor_emprestado.pack()
         botao.pack(pady=50)
+        valor_emprestado = novo_valor_emprestado
+        taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
 
         # Solicita novamente o valor emprestado até ser válido
-        while valor_emprestado <= 0 or taxa <= 1.3:
+        
             # try:
                 # valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
-                taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
-                print("Valor emprestado deve ser maior que 0.")
+                
+                # print("Valor emprestado deve ser maior que 0.")
                 # entry_valor_emprestado.delete(0, customtkinter.END)
 
             # except ValueError:
@@ -139,7 +141,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-def ler_pdf(out_folder, label, entrada_verificar, botao):
+def ler_pdf(out_folder, label, entrada_verificar, botao, novo_valor_emprestado):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
@@ -177,7 +179,7 @@ def ler_pdf(out_folder, label, entrada_verificar, botao):
                         #calculo de taxa de juros
                         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                         
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar, botao)
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar, botao, novo_valor_emprestado)
                         
                         # Calcular o valor de liquidação
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
@@ -315,8 +317,7 @@ def start_gui():
             def gravar_valor_emprestado():
                 valor_emprestado = entrada_verificar.get()
                 print(valor_emprestado)
-                float_valor_emprestado = float(valor_emprestado)
-                self.novo_valor_emprestado.set(float_valor_emprestado)
+                self.novo_valor_emprestado.set(float(valor_emprestado))
 
             def executar_funções():
                 global first_table
@@ -325,7 +326,7 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                 show_next_frame()
-                ler_pdf(out_folder, label_6, entrada_verificar, valor_emprestado_botao)
+                ler_pdf(out_folder, label_6, entrada_verificar, valor_emprestado_botao, self.novo_valor_emprestado)
 
                 #self.destroy()  # This closes the window
 
