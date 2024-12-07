@@ -319,10 +319,8 @@ def start_gui():
             def gravar_valor_emprestado():
                 valor_emprestado = entrada_verificar.get()
                 print(valor_emprestado)
-                new_valor_emprestado = float(valor_emprestado)
-                self.novo_valor_emprestado.set(new_valor_emprestado)
-
-                return valor_emprestado
+                float_valor_emprestado = float(valor_emprestado)
+                self.novo_valor_emprestado.set(float_valor_emprestado)
 
             def executar_funções():
                 global first_table
