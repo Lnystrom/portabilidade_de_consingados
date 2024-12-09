@@ -97,7 +97,7 @@ def calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal):
     
     return valor_presente
 
-def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label_erro, entry_valor_emprestado, botao, novo_valor_emprestado):
+def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, argumentos):
     """
     Verifica e valida os dados do empréstimo (valor emprestado e taxa de juros).
     
@@ -119,11 +119,42 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
 
     while valor_emprestado <= 0 or taxa <= 1.3:
         # print("Os dados fornecidos são inválidos.")
-        label_erro.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
-        label_erro.pack(pady=50, side='top', anchor='s')
-        entry_valor_emprestado.pack()
-        botao.pack(pady=50)
-        valor_emprestado = novo_valor_emprestado
+        argumentos[0]['label_6'].configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
+        argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
+
+        def freeze_until_button():
+
+            def gravar_valor_emprestado():
+                argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get()))
+
+            # Esta função congela a interface até que o botão seja pressionado
+            print("Interface congelada!")
+            popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
+            popup.geometry("600x500")
+            popup.title("Congelado")
+
+            entrada_verificar = customtkinter.CTkEntry(
+                popup,
+                placeholder_text="Informe o valor emprestado"
+            )
+
+            valor_emprestado_botao = customtkinter.CTkButton(
+                popup, text="alterar valor liberado", command=gravar_valor_emprestado, width=100
+            )
+
+            entrada_verificar.pack()
+            valor_emprestado_botao.pack()
+
+
+            button = customtkinter.CTkButton(popup, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
+            button.pack(pady=20)
+
+            popup.wait_window()  # Congela a execução até que o popup seja fechado
+            print("Interface desbloqueada!")
+
+        freeze_until_button()
+
+        valor_emprestado = float(argumentos[0]['novo_valor_emprestado'].get())
         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
 
         # Solicita novamente o valor emprestado até ser válido
@@ -141,7 +172,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, l
     # Retorna os valores validados
     return valor_emprestado, taxa
 
-def ler_pdf(out_folder, label, entrada_verificar, botao, novo_valor_emprestado):
+def ler_pdf(out_folder, argumentos):
     with pdfplumber.open(f"{out_folder}/consignado.pdf") as pdf:
     # Variável para armazenar o texto filtrado
     # Iterar pelas páginas do PDF
@@ -179,7 +210,7 @@ def ler_pdf(out_folder, label, entrada_verificar, botao, novo_valor_emprestado):
                         #calculo de taxa de juros
                         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
                         
-                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, label, entrada_verificar, botao, novo_valor_emprestado)
+                        valor_emprestado, taxa = verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, argumentos)
                         
                         # Calcular o valor de liquidação
                         valor_liquidacao = np.round(calcular_liquidacao(valor_parcela, meses_restantes, taxa), 2)
@@ -261,6 +292,7 @@ def start_gui():
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
+                customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self)
             ]
 
@@ -325,10 +357,15 @@ def start_gui():
                     out_folder = "padrao"
                 else: 
                     out_folder = self.result.get()
+                    print(out_folder)
                 show_next_frame()
-                ler_pdf(out_folder, label_6, entrada_verificar, valor_emprestado_botao, self.novo_valor_emprestado)
+                ler_pdf(out_folder, argumentos_ler_pdf)
 
                 #self.destroy()  # This closes the window
+
+            def imprimir_resultados_final():
+                imprimir_resultados(self.result.get())
+                self.destroy()
 
             # Função para esconder todos os frames
             def hide_all_frames():
@@ -360,9 +397,17 @@ def start_gui():
                 if self.frame_atual == 4:
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
-                        text="Processar arquivo",
+                        text="Next frame",
                         command=show_next_frame,
                     )  # Cria o botão "Next Page" para o novo frame
+
+                if self.frame_atual == 5:
+                    forward_button = customtkinter.CTkButton(
+                        self.lista_de_frames[self.frame_atual],
+                        text="Criar tabelas",
+                        command=imprimir_resultados_final,
+                    )  # Cria o botão "Next Page" para o novo frame
+
 
                 forward_button.pack(pady=200, side="bottom", anchor="n")
 
@@ -456,8 +501,32 @@ def start_gui():
                 text="Next page",
                 command=show_next_frame,
             )
+
+            # --- Frame 6: Criar tabela e abrir ---
+            draw_header(self.lista_de_frames[5])  # Desenha o cabeçalho no quarto frame
+            label_7 = customtkinter.CTkLabel(
+                self.lista_de_frames[5], text="Tabelas de valor de liquidação", font=("Arial", 20)
+            ) 
+            label_8 = customtkinter.CTkLabel(
+                self.lista_de_frames[5], text=f"As tabelas estarão disponíveis na pasta com CPF indicado", font=("Arial", 14)
+            )                  
+            label_7.pack()  
+            label_8.pack()
+
             forward_button.pack()#pady=250, side="bottom", anchor="n"
-        
+
+            argumentos_ler_pdf =  [
+                {
+                    'label_6': label_6,
+                    'valor_emprestado_botao': valor_emprestado_botao,
+                    'novo_valor_emprestado': self.novo_valor_emprestado,
+                    'altura': altura,
+                    'largura': largura,
+                    'x': x,
+                    'y': y
+                }
+            ]
+
     app = App()
     app.mainloop()
 
