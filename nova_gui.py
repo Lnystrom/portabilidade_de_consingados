@@ -124,10 +124,9 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
 
         print(contrato)
         def freeze_until_button():
-
             def gravar_valor_emprestado():
                 argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
-                button.pack(pady=20)
+                button.pack(pady=50)
 
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
@@ -148,8 +147,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             valor_emprestado_botao.pack()
 
             button = customtkinter.CTkButton(popup, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
-            
-
             popup.wait_window()  # Congela a execução até que o popup seja fechado
             print("Interface desbloqueada!")
 
@@ -295,6 +292,7 @@ def start_gui():
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self),
+                customtkinter.CTkFrame(self),
                 customtkinter.CTkFrame(self)
             ]
 
@@ -367,6 +365,8 @@ def start_gui():
 
             def imprimir_resultados_final():
                 imprimir_resultados(self.result.get())
+
+            def encerrar():
                 self.destroy()
 
             # Função para esconder todos os frames
@@ -410,6 +410,12 @@ def start_gui():
                         command=imprimir_resultados_final,
                     )  # Cria o botão "Next Page" para o novo frame
 
+                if self.frame_atual == 6:
+                    forward_button = customtkinter.CTkButton(
+                        self.lista_de_frames[self.frame_atual],
+                        text="Encerrar programa",
+                        command=encerrar,
+                    )  # Cria o botão "Next Page" para o novo frame
 
                 forward_button.pack(pady=200, side="bottom", anchor="n")
 
