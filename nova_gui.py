@@ -171,6 +171,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             #     entry_valor_emprestado.delete(0, customtkinter.END)
         
     # Retorna os valores validados
+    argumentos[0]['label_6'].configure(text="Valores regularizados")
     return valor_emprestado, taxa
 
 def ler_pdf(out_folder, argumentos):
@@ -509,10 +510,10 @@ def start_gui():
                 self.lista_de_frames[5], text="Tabelas de valor de liquidação", font=("Arial", 20)
             ) 
             label_8 = customtkinter.CTkLabel(
-                self.lista_de_frames[5], text=f"As tabelas estarão disponíveis na pasta com CPF indicado", font=("Arial", 14)
+                self.lista_de_frames[5], text=f"As tabelas estarão disponíveis na pasta com CPF indicado", font=("Arial", 20)
             )                  
-            label_7.pack()  
-            label_8.pack()
+            label_7.pack(pady=20)  
+            label_8.pack(pady=20)
 
             forward_button.pack()#pady=250, side="bottom", anchor="n"
 
