@@ -122,10 +122,11 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
         argumentos[0]['label_6'].configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
         argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
 
+        print(contrato)
         def freeze_until_button():
 
             def gravar_valor_emprestado():
-                argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get()))
+                argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
 
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
