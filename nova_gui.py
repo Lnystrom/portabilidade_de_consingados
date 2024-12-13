@@ -127,6 +127,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
 
             def gravar_valor_emprestado():
                 argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
+                button.pack(pady=20)
 
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
@@ -146,9 +147,8 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             entrada_verificar.pack()
             valor_emprestado_botao.pack()
 
-
             button = customtkinter.CTkButton(popup, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
-            button.pack(pady=20)
+            
 
             popup.wait_window()  # Congela a execução até que o popup seja fechado
             print("Interface desbloqueada!")
