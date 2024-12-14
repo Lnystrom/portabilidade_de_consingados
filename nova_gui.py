@@ -169,9 +169,9 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
         
         def freeze_until_button():
             def gravar_valor_emprestado():
-                
                 argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
-                button.pack(pady=50)
+                popup.destroy()
+                # button.pack(pady=50)
 
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
@@ -181,26 +181,26 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             frame_1_pop = customtkinter.CTkFrame(popup)
             label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
             label_imagem_1 = customtkinter.CTkLabel(frame_1_pop, width=1753, height=1240)
+            entrada_verificar = customtkinter.CTkEntry(
+                frame_1_pop,
+                placeholder_text="Informe o valor emprestado"
+            )
+
+            valor_emprestado_botao = customtkinter.CTkButton(
+                frame_1_pop, text="alterar valor liberado", command=gravar_valor_emprestado, width=100
+            )
             mostrar_pdf(label_imagem_1)
             argumentos[0]['draw_header'](frame_1_pop)
             frame_1_pop.pack(fill="both", expand=True)
             label_1_pop.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
             label_1_pop.pack()
-            label_imagem_1.pack()
-            
-            entrada_verificar = customtkinter.CTkEntry(
-                popup,
-                placeholder_text="Informe o valor emprestado"
-            )
-
-            valor_emprestado_botao = customtkinter.CTkButton(
-                popup, text="alterar valor liberado", command=gravar_valor_emprestado, width=100
-            )
-
             entrada_verificar.pack()
             valor_emprestado_botao.pack()
+            label_imagem_1.pack()
+            
 
-            button = customtkinter.CTkButton(popup, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
+
+            # button = customtkinter.CTkButton(frame_1_pop, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
             popup.wait_window()  # Congela a execução até que o popup seja fechado
             print("Interface desbloqueada!")
 
