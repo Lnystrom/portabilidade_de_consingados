@@ -125,7 +125,48 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
         # argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
         # argumentos[0]['label_imagem_1'].pack()
 
+        def mostrar_pdf(label_imagem_1):
+            # Abrir o PDF
+            doc = fitz.open(f"{pasta}/consignado.pdf")
+            
+            # Carregar a página desejada com uma matriz de aumento para melhorar a resolução
+            pagina = doc.load_page(2)  # Página 2 (contagem começa do 0)
+            
+            # Aumenta a resolução 3x (ajuste o valor conforme necessário)
+            imagem_1 = pagina.get_pixmap(matrix=fitz.Matrix(3, 3))  # Aumenta a resolução 3x
+            
+            # Converter o pixmap para uma imagem PIL
+            imagem_pil = Image.frombytes("RGB", [imagem_1.width, imagem_1.height], imagem_1.samples)
+            
+            # Obter as dimensões reais da imagem
+            largura_imagem = imagem_pil.width
+            altura_imagem = imagem_pil.height
+            
+            # Definir as dimensões máximas para o widget
+            largura_widget_max = 1753  # Máxima largura do widget
+            altura_widget_max = 1240   # Máxima altura do widget
+
+            # Calcular a proporção para redimensionar a imagem, mantendo as proporções
+            proporcao = min(largura_widget_max / largura_imagem, altura_widget_max / altura_imagem)
+            nova_largura = int(largura_imagem * proporcao)
+            nova_altura = int(altura_imagem * proporcao)
+
+            # Redimensionar a imagem para o novo tamanho calculado
+            imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
+
+            # Converter a imagem redimensionada para CTkImage
+            imagem_ctk = customtkinter.CTkImage(dark_image=imagem_redimensionada, light_image=imagem_redimensionada)
+
+            # Exibir a imagem no label
+            label_imagem_1.configure(image=imagem_ctk)
+            label_imagem_1.image = imagem_ctk  # Manter a referência para evitar que a imagem seja descartada
+
+            # Garantir que o label tenha as dimensões necessárias para exibir a imagem
+            label_imagem_1.configure(width=nova_largura, height=nova_altura)  # Ajusta o tamanho do widget para o tamanho da imagem
+
+
         print(contrato)
+        
         def freeze_until_button():
             def gravar_valor_emprestado():
                 
@@ -136,18 +177,17 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             print("Interface congelada!")
             popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
             popup.geometry(f'{argumentos[0]["largura"]}x{argumentos[0]["altura"]}+{argumentos[0]["x"]}+{argumentos[0]["y"]}')
-
             popup.title("Congelado")
-
-
             frame_1_pop = customtkinter.CTkFrame(popup)
             label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
+            label_imagem_1 = customtkinter.CTkLabel(frame_1_pop, width=1753, height=1240)
+            mostrar_pdf(label_imagem_1)
             argumentos[0]['draw_header'](frame_1_pop)
-            label_1_pop.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
             frame_1_pop.pack(fill="both", expand=True)
+            label_1_pop.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
             label_1_pop.pack()
-
-
+            label_imagem_1.pack()
+            
             entrada_verificar = customtkinter.CTkEntry(
                 popup,
                 placeholder_text="Informe o valor emprestado"
@@ -168,18 +208,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
 
         valor_emprestado = float(argumentos[0]['novo_valor_emprestado'].get())
         taxa = np.round(calcular_taxa(parcelas, valor_parcela, valor_emprestado)*100,2)
-
-        # Solicita novamente o valor emprestado até ser válido
-        
-            # try:
-                # valor_emprestado = float(input(f"O contrato {contrato} está com valor emprestado incorreto para o cáculo, por favor informe um valor emprestado válido (VALOR LIBERADO): "))
-                
-                # print("Valor emprestado deve ser maior que 0.")
-                # entry_valor_emprestado.delete(0, customtkinter.END)
-
-            # except ValueError:
-            #     print("Por favor, insira um número válido para o valor emprestado.")
-            #     entry_valor_emprestado.delete(0, customtkinter.END)
         
     # Retorna os valores validados
     argumentos[0]['label_6'].configure(text="Valores regularizados")
@@ -358,6 +386,8 @@ def start_gui():
                 global first_table
                 first_table = False
                 cpf_botao.configure(state='disabled')
+                global pasta
+                pasta = nome_da_pasta
                 return nome_da_pasta
 
             def gravar_valor_emprestado():
@@ -373,57 +403,7 @@ def start_gui():
                     out_folder = self.result.get()
                     print(out_folder)
                 show_next_frame()
-                mostrar_pdf()
-                ler_pdf(out_folder, argumentos_ler_pdf)
-                
-
-            def mostrar_pdf():
-                # Abrir o PDF
-                doc = fitz.open(f"{self.result.get()}/consignado.pdf")
-                
-                # Carregar a página desejada
-                pagina = doc.load_page(2)  # Página 2 (contagem começa do 0)
-                
-                # Converter a página para um pixmap (imagem)
-                imagem_1 = pagina.get_pixmap()
-                
-                # Converter o pixmap para uma imagem PIL
-                imagem_pil = Image.frombytes("RGB", [imagem_1.width, imagem_1.height], imagem_1.samples)
-                
-                # Definir as dimensões do widget (tamanho fixo de 50% de A4 em paisagem)
-                largura_widget = 1227  # 50% da largura A4 em paisagem
-                altura_widget = 868   # 50% da altura A4 em paisagem
-
-                # Verificar se o widget tem dimensões válidas (não zero)
-                if largura_widget > 0 and altura_widget > 0:
-                    # Calcular a proporção para redimensionar mantendo a proporção da imagem
-                    proporcao = min(largura_widget / imagem_pil.width, altura_widget / imagem_pil.height)
-                    nova_largura = int(imagem_pil.width * proporcao)
-                    nova_altura = int(imagem_pil.height * proporcao)
-
-                    # Verificar se as novas dimensões são válidas
-                    if nova_largura > 0 and nova_altura > 0:
-                        # Redimensionar a imagem mantendo a proporção
-                        imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
-
-                        # Converter a imagem redimensionada para o formato que o Tkinter pode usar
-                        imagem_tk = ImageTk.PhotoImage(imagem_redimensionada)
-                        
-                        # Exibir a imagem no label
-                        label_imagem_1.configure(image=imagem_tk)
-                        label_imagem_1.image = imagem_tk  # Manter a referência para evitar que a imagem seja descartada
-                    else:
-                        print("Erro: as dimensões da imagem redimensionada não são válidas.")
-                else:
-                    print("Erro: as dimensões do widget são inválidas.")
-                            
-    
-
-            # def mostrar_imagem():
-            #     imagem = Image.open("imagem.png")
-            #     imagem_tk = ImageTk.PhotoImage(imagem)
-            #     label_imagem.config(image=imagem_tk)
-            #     label_imagem.image = imagem_tk  # Mantém a referência para a imagem
+                ler_pdf(out_folder, argumentos_ler_pdf)                
 
             def imprimir_resultados_final():
                 imprimir_resultados(self.result.get())
@@ -561,7 +541,7 @@ def start_gui():
                 self.lista_de_frames[4],
                 placeholder_text="Informe o valor emprestado"
             )
-            label_imagem_1 = customtkinter.CTkLabel(self.lista_de_frames[4], width=1753, height=1240)
+            
 
             valor_emprestado_botao = customtkinter.CTkButton(
                 self.lista_de_frames[4], text="alterar valor liberado", command=gravar_valor_emprestado, width=100
@@ -595,7 +575,6 @@ def start_gui():
             )
 
             forward_button.pack()#pady=250, side="bottom", anchor="n"
-
             argumentos_ler_pdf =  [
                 {
                     'label_6': label_6,
@@ -605,8 +584,7 @@ def start_gui():
                     'largura': largura,
                     'x': x,
                     'y': y,
-                    'label_imagem_1': label_imagem_1,
-                    'draw_header': draw_header
+                    'draw_header': draw_header,
                 }
             ]
 
