@@ -129,41 +129,41 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             # Abrir o PDF
             doc = fitz.open(f"{pasta}/consignado.pdf")
             
-            # Carregar a página desejada com uma matriz de aumento para melhorar a resolução
+            # Carregar a página desejada
             pagina = doc.load_page(2)  # Página 2 (contagem começa do 0)
             
-            # Aumenta a resolução 3x (ajuste o valor conforme necessário)
-            imagem_1 = pagina.get_pixmap(matrix=fitz.Matrix(3, 3))  # Aumenta a resolução 3x
+            # Converter a página para um pixmap (imagem)
+            imagem_1 = pagina.get_pixmap()
             
             # Converter o pixmap para uma imagem PIL
             imagem_pil = Image.frombytes("RGB", [imagem_1.width, imagem_1.height], imagem_1.samples)
             
-            # Obter as dimensões reais da imagem
-            largura_imagem = imagem_pil.width
-            altura_imagem = imagem_pil.height
-            
-            # Definir as dimensões máximas para o widget
-            largura_widget_max = 1753  # Máxima largura do widget
-            altura_widget_max = 1240   # Máxima altura do widget
+            # Definir as dimensões do widget (tamanho fixo de 50% de A4 em paisagem)
+            largura_widget = 1227  # 50% da largura A4 em paisagem
+            altura_widget = 868   # 50% da altura A4 em paisagem
 
-            # Calcular a proporção para redimensionar a imagem, mantendo as proporções
-            proporcao = min(largura_widget_max / largura_imagem, altura_widget_max / altura_imagem)
-            nova_largura = int(largura_imagem * proporcao)
-            nova_altura = int(altura_imagem * proporcao)
+            # Verificar se o widget tem dimensões válidas (não zero)
+            if largura_widget > 0 and altura_widget > 0:
+                # Calcular a proporção para redimensionar mantendo a proporção da imagem
+                proporcao = min(largura_widget / imagem_pil.width, altura_widget / imagem_pil.height)
+                nova_largura = int(imagem_pil.width * proporcao)
+                nova_altura = int(imagem_pil.height * proporcao)
 
-            # Redimensionar a imagem para o novo tamanho calculado
-            imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
+                # Verificar se as novas dimensões são válidas
+                if nova_largura > 0 and nova_altura > 0:
+                    # Redimensionar a imagem mantendo a proporção
+                    imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
 
-            # Converter a imagem redimensionada para CTkImage
-            imagem_ctk = customtkinter.CTkImage(dark_image=imagem_redimensionada, light_image=imagem_redimensionada)
-
-            # Exibir a imagem no label
-            label_imagem_1.configure(image=imagem_ctk)
-            label_imagem_1.image = imagem_ctk  # Manter a referência para evitar que a imagem seja descartada
-
-            # Garantir que o label tenha as dimensões necessárias para exibir a imagem
-            label_imagem_1.configure(width=nova_largura, height=nova_altura)  # Ajusta o tamanho do widget para o tamanho da imagem
-
+                    # Converter a imagem redimensionada para o formato que o Tkinter pode usar
+                    imagem_tk = ImageTk.PhotoImage(imagem_redimensionada)
+                    
+                    # Exibir a imagem no label
+                    label_imagem_1.configure(image=imagem_tk, text="")
+                    label_imagem_1.image = imagem_tk  # Manter a referência para evitar que a imagem seja descartada
+                else:
+                    print("Erro: as dimensões da imagem redimensionada não são válidas.")
+            else:
+                print("Erro: as dimensões do widget são inválidas.")
 
         print(contrato)
         
