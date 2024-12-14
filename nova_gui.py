@@ -561,11 +561,14 @@ def start_gui():
             # --- Frame 7: Mostrar tabela e fechar programa ---
             draw_header(self.lista_de_frames[6])  
             label_10 = customtkinter.CTkLabel(
-                self.lista_de_frames[6], text="Tabelas de valor de liquidação", font=("Arial", 20)
+                self.lista_de_frames[6], text="Valores de liquidação atualizados", font=("Arial", 20)
             )
-            # label_imagem = customtkinter.CTkLabel(self.lista_de_frames[6])
-            # label_10.pack(pady=20)
-            # label_imagem.pack(padx=10, pady=10)
+            tabelas_imagem = Image.open(f"{self.result.get()}\\tabela_liquidacao.png")
+            tabelas_imagem_ctk = ImageTk.PhotoImage(tabelas_imagem)
+            label_imagem = customtkinter.CTkLabel(self.lista_de_frames[6], tabelas_imagem = tabelas_imagem_ctk )
+            label_10.pack(pady=20)
+            label_imagem.pack(pady=20)
+        
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
