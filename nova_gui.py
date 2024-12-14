@@ -563,14 +563,9 @@ def start_gui():
             label_10 = customtkinter.CTkLabel(
                 self.lista_de_frames[6], text="Valores de liquidação atualizados", font=("Arial", 20)
             )
-
-            
-            tabelas_imagem = Image.open(f"{self.result.get()}tabela_liquidacao.png")
-            tabelas_imagem_ctk = ImageTk.PhotoImage(tabelas_imagem)
-            label_imagem = customtkinter.CTkLabel(self.lista_de_frames[6], tabelas_imagem = tabelas_imagem_ctk )
             label_10.pack(pady=20)
-            label_imagem.pack(pady=20)
-        
+
+
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
