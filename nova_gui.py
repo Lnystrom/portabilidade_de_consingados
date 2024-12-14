@@ -13,6 +13,8 @@ import pdfplumber
 
 # Bibliotecas para gráficos
 import matplotlib.pyplot as plt
+import fitz  # PyMuPDF
+from PIL import Image, ImageTk
 
 # Bibliotecas para manipulação de dados
 import pandas as pd
@@ -121,17 +123,19 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
         # print("Os dados fornecidos são inválidos.")
         argumentos[0]['label_6'].configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
         argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
+        argumentos[0]['label_imagem_1'].pack()
 
         print(contrato)
         def freeze_until_button():
             def gravar_valor_emprestado():
+                
                 argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
                 button.pack(pady=50)
 
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
             popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
-            popup.geometry("600x500")
+            popup.geometry("300x200")
             popup.title("Congelado")
 
             entrada_verificar = customtkinter.CTkEntry(
@@ -359,12 +363,61 @@ def start_gui():
                     out_folder = self.result.get()
                     print(out_folder)
                 show_next_frame()
+                mostrar_pdf()
                 ler_pdf(out_folder, argumentos_ler_pdf)
+                
 
-                #self.destroy()  # This closes the window
+            def mostrar_pdf():
+                # Abrir o PDF
+                doc = fitz.open(f"{self.result.get()}/consignado.pdf")
+                
+                # Carregar a página desejada
+                pagina = doc.load_page(2)  # Página 2 (contagem começa do 0)
+                
+                # Converter a página para um pixmap (imagem)
+                imagem_1 = pagina.get_pixmap()
+                
+                # Converter o pixmap para uma imagem PIL
+                imagem_pil = Image.frombytes("RGB", [imagem_1.width, imagem_1.height], imagem_1.samples)
+                
+                # Definir as dimensões do widget (tamanho fixo de 50% de A4 em paisagem)
+                largura_widget = 1227  # 50% da largura A4 em paisagem
+                altura_widget = 868   # 50% da altura A4 em paisagem
+
+                # Verificar se o widget tem dimensões válidas (não zero)
+                if largura_widget > 0 and altura_widget > 0:
+                    # Calcular a proporção para redimensionar mantendo a proporção da imagem
+                    proporcao = min(largura_widget / imagem_pil.width, altura_widget / imagem_pil.height)
+                    nova_largura = int(imagem_pil.width * proporcao)
+                    nova_altura = int(imagem_pil.height * proporcao)
+
+                    # Verificar se as novas dimensões são válidas
+                    if nova_largura > 0 and nova_altura > 0:
+                        # Redimensionar a imagem mantendo a proporção
+                        imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
+
+                        # Converter a imagem redimensionada para o formato que o Tkinter pode usar
+                        imagem_tk = ImageTk.PhotoImage(imagem_redimensionada)
+                        
+                        # Exibir a imagem no label
+                        label_imagem_1.configure(image=imagem_tk)
+                        label_imagem_1.image = imagem_tk  # Manter a referência para evitar que a imagem seja descartada
+                    else:
+                        print("Erro: as dimensões da imagem redimensionada não são válidas.")
+                else:
+                    print("Erro: as dimensões do widget são inválidas.")
+                            
+    
+
+            # def mostrar_imagem():
+            #     imagem = Image.open("imagem.png")
+            #     imagem_tk = ImageTk.PhotoImage(imagem)
+            #     label_imagem.config(image=imagem_tk)
+            #     label_imagem.image = imagem_tk  # Mantém a referência para a imagem
 
             def imprimir_resultados_final():
                 imprimir_resultados(self.result.get())
+                show_next_frame()
 
             def encerrar():
                 self.destroy()
@@ -407,7 +460,7 @@ def start_gui():
                     forward_button = customtkinter.CTkButton(
                         self.lista_de_frames[self.frame_atual],
                         text="Criar tabelas",
-                        command=imprimir_resultados_final,
+                        command=imprimir_resultados_final
                     )  # Cria o botão "Next Page" para o novo frame
 
                 if self.frame_atual == 6:
@@ -498,10 +551,31 @@ def start_gui():
                 self.lista_de_frames[4],
                 placeholder_text="Informe o valor emprestado"
             )
+            label_imagem_1 = customtkinter.CTkLabel(self.lista_de_frames[4], width=1753, height=1240)
 
             valor_emprestado_botao = customtkinter.CTkButton(
                 self.lista_de_frames[4], text="alterar valor liberado", command=gravar_valor_emprestado, width=100
             )
+
+            # --- Frame 6: Criar tabela ---
+            draw_header(self.lista_de_frames[5])  
+            label_7 = customtkinter.CTkLabel(
+                self.lista_de_frames[5], text="Tabelas de valor de liquidação", font=("Arial", 20)
+            ) 
+            label_8 = customtkinter.CTkLabel(
+                self.lista_de_frames[5], text=f"As tabelas estarão disponíveis, salvas, na pasta com CPF indicado", font=("Arial", 20)
+            )                  
+            label_7.pack(pady=20)  
+            label_8.pack(pady=20)
+
+            # --- Frame 7: Mostrar tabela e fechar programa ---
+            draw_header(self.lista_de_frames[6])  
+            label_10 = customtkinter.CTkLabel(
+                self.lista_de_frames[6], text="Tabelas de valor de liquidação", font=("Arial", 20)
+            )
+            # label_imagem = customtkinter.CTkLabel(self.lista_de_frames[6])
+            # label_10.pack(pady=20)
+            # label_imagem.pack(padx=10, pady=10)
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
@@ -509,17 +583,6 @@ def start_gui():
                 text="Next page",
                 command=show_next_frame,
             )
-
-            # --- Frame 6: Criar tabela e abrir ---
-            draw_header(self.lista_de_frames[5])  # Desenha o cabeçalho no quarto frame
-            label_7 = customtkinter.CTkLabel(
-                self.lista_de_frames[5], text="Tabelas de valor de liquidação", font=("Arial", 20)
-            ) 
-            label_8 = customtkinter.CTkLabel(
-                self.lista_de_frames[5], text=f"As tabelas estarão disponíveis na pasta com CPF indicado", font=("Arial", 20)
-            )                  
-            label_7.pack(pady=20)  
-            label_8.pack(pady=20)
 
             forward_button.pack()#pady=250, side="bottom", anchor="n"
 
@@ -531,7 +594,8 @@ def start_gui():
                     'altura': altura,
                     'largura': largura,
                     'x': x,
-                    'y': y
+                    'y': y,
+                    'label_imagem_1': label_imagem_1
                 }
             ]
 
