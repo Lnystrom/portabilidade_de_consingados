@@ -120,10 +120,10 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
     """
 
     while valor_emprestado <= 0 or taxa <= 1.3:
-        # print("Os dados fornecidos são inválidos.")
-        argumentos[0]['label_6'].configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
-        argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
-        argumentos[0]['label_imagem_1'].pack()
+        # # print("Os dados fornecidos são inválidos.")
+        # argumentos[0]['label_6'].configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
+        # argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
+        # argumentos[0]['label_imagem_1'].pack()
 
         print(contrato)
         def freeze_until_button():
@@ -135,8 +135,18 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
             popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
-            popup.geometry("300x200")
+            popup.geometry(f'{argumentos[0]["largura"]}x{argumentos[0]["altura"]}+{argumentos[0]["x"]}+{argumentos[0]["y"]}')
+
             popup.title("Congelado")
+
+
+            frame_1_pop = customtkinter.CTkFrame(popup)
+            label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
+            argumentos[0]['draw_header'](frame_1_pop)
+            label_1_pop.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
+            frame_1_pop.pack(fill="both", expand=True)
+            label_1_pop.pack()
+
 
             entrada_verificar = customtkinter.CTkEntry(
                 popup,
@@ -595,7 +605,8 @@ def start_gui():
                     'largura': largura,
                     'x': x,
                     'y': y,
-                    'label_imagem_1': label_imagem_1
+                    'label_imagem_1': label_imagem_1,
+                    'draw_header': draw_header
                 }
             ]
 
