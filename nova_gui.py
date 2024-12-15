@@ -319,6 +319,8 @@ def start_gui():
         def __init__(self):
             super().__init__()
 
+            self.janela_fechada = False  # Controla o estado da janela
+
             # configure window
             self.title("CustomTkinter complex_example.py")
             self.geometry(f"{largura}x{altura}+{x}+{y}")
@@ -422,7 +424,21 @@ def start_gui():
 
 
             def encerrar():
-                self.destroy()
+                if not self.janela_fechada:  # Verifica se a janela ainda não foi fechada
+                    print("Encerrando a aplicação.")
+                    self.janela_fechada = True  # Marca que a janela foi fechada
+                    self.destroy()  # Fecha a janela do Tkinter
+                else:
+                    print("A janela já foi fechada anteriormente.")
+
+            def fechar_janela(self):
+                if not self.janela_fechada:  # Verifica se a janela ainda não foi fechada
+                    print("Realizando a limpeza antes de fechar.")
+                    self.janela_fechada = True  # Marca que a janela foi fechada
+                    # Realiza a limpeza de recursos (exemplo de fechamento de arquivos, etc.)
+                    self.destroy()  # Fecha a janela do Tkinter
+                else:
+                    print("A janela já foi fechada anteriormente.")
 
             # Função para esconder todos os frames
             def hide_all_frames():
@@ -577,9 +593,6 @@ def start_gui():
             )
             label_10.pack(pady=20)
             exibir_imagem()
-            
-            
-
 
             # Cria o botão "Next Page" para o primeiro frame
             forward_button = customtkinter.CTkButton(
@@ -601,6 +614,8 @@ def start_gui():
                     'draw_header': draw_header,
                 }
             ]
+
+            itens_para_encerrar = []
 
     app = App()
     app.mainloop()
