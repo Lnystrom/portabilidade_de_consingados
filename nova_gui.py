@@ -409,6 +409,18 @@ def start_gui():
                 imprimir_resultados(self.result.get())
                 show_next_frame()
 
+            def exibir_imagem():
+                imagem_png = Image.open(f"{self.result.get()}tabela_liquidacao.png")
+                largura, altura = imagem_png.size
+                largura = round(largura*0.3)
+                altura = round(altura*0.3)
+                imagem_png = imagem_png.resize((largura, altura))
+                imagem_ctk = ImageTk.PhotoImage(imagem_png)
+                label_image = customtkinter.CTkLabel(self.lista_de_frames[6], image = imagem_ctk, text="")
+                label_image.pack()
+                label_image.image = imagem_ctk
+
+
             def encerrar():
                 self.destroy()
 
@@ -564,7 +576,9 @@ def start_gui():
                 self.lista_de_frames[6], text="Valores de liquidação atualizados", font=("Arial", 20)
             )
             label_10.pack(pady=20)
-
+            exibir_imagem()
+            
+            
 
 
             # Cria o botão "Next Page" para o primeiro frame
