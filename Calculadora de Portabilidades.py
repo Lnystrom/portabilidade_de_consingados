@@ -351,6 +351,14 @@ def start_gui():
                     print(f"Pasta '{nome_da_pasta}' criada com sucesso!")
                 except FileExistsError:
                     print(f"A pasta '{nome_da_pasta}' já existe.")
+
+                # Agora cria a pasta "imagens" dentro da pasta principal
+                pasta_imagens = os.path.join(nome_da_pasta, "imagens")
+                try:
+                    os.makedirs(pasta_imagens)
+                    print(f"Pasta 'imagens' criada dentro de '{nome_da_pasta}' com sucesso!")
+                except FileExistsError:
+                    print(f"A pasta 'imagens' já existe dentro de '{nome_da_pasta}'.")
                 self.result.set(nome_da_pasta)
                 global first_table
                 first_table = False
@@ -398,12 +406,12 @@ def start_gui():
                     page = doc.load_page(page_num)  # Carrega a página
                     matriz = fitz.Matrix(1.5, 1.5)  # Aumenta a resolução para 3 vezes maior
                     pix = page.get_pixmap(matrix=matriz)  # Gera uma imagem a partir da página
-                    output_image = f"{self.result.get()}/pagina_{page_num + 1}.png"
+                    output_image = f"{self.result.get()}/imagens/pagina_{page_num + 1}.png"
                     pix.save(output_image)  # Salva a imagem como PNG
                     print(f"Página {page_num + 1} salva como {output_image}")
                     lista_de_imagens.append(output_image)
 
-                imagem_png = Image.open(f"{self.result.get()}/pagina_3.png")
+                imagem_png = Image.open(f"{self.result.get()}/imagens/pagina_3.png")
                 largura, altura = imagem_png.size
                 largura = round(largura*1)
                 altura = round(altura*1)
