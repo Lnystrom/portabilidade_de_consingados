@@ -351,6 +351,7 @@ def start_gui():
             # Criar a variável result após a criação da janela
             self.result = customtkinter.StringVar()
             self.novo_valor_emprestado = customtkinter.StringVar()
+            lista_de_imagens = []
 
             def open_link():
                 webbrowser.open("https://www.linkedin.com/in/leuryssom-nystrom-539785219/")
@@ -444,6 +445,8 @@ def start_gui():
                     output_image = f"{self.result.get()}/pagina_{page_num + 1}.png"
                     pix.save(output_image)  # Salva a imagem como PNG
                     print(f"Página {page_num + 1} salva como {output_image}")
+                    lista_de_imagens.append(output_image)
+
                 
 
             def encerrar():
@@ -628,7 +631,7 @@ def start_gui():
                     'x': x,
                     'y': y,
                     'draw_header': draw_header,
-                    'exibir_pagina':exibir_pagina
+                    'lista_de_imagens': lista_de_imagens
                 }
             ]
 
