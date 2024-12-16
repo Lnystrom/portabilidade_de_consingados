@@ -8,10 +8,9 @@ setup(
     options={
         "build_exe": {
             # Inclua os arquivos necessários (por exemplo, gui.py)
-            "include_files": ["gui.py"],
         }
     },
-    executables=[Executable("main.py", icon="icone.ico")]  # Aqui é onde você adiciona o ícone
+    executables=[Executable("nova_gui.py", icon="icone.ico")]  # Aqui é onde você adiciona o ícone
 )
 
 #python setup.py build
