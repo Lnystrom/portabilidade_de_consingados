@@ -130,48 +130,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
         # argumentos[0]['label_6'].pack(pady=50, side='top', anchor='s')
         # argumentos[0]['label_imagem_1'].pack()
 
-        def mostrar_pdf(label_imagem_1):
-            # Abrir o PDF
-            doc = fitz.open(f"{pasta}/consignado.pdf")
-            
-            # Carregar a página desejada
-            pagina = doc.load_page(2)  # Página 2 (contagem começa do 0)
-            
-            # Converter a página para um pixmap (imagem)
-            imagem_1 = pagina.get_pixmap()
-            
-            # Converter o pixmap para uma imagem PIL
-            imagem_pil = Image.frombytes("RGB", [imagem_1.width, imagem_1.height], imagem_1.samples)
-            
-            # Definir as dimensões do widget (tamanho fixo de 50% de A4 em paisagem)
-            largura_widget = 1227  # 50% da largura A4 em paisagem
-            altura_widget = 868   # 50% da altura A4 em paisagem
 
-            # Verificar se o widget tem dimensões válidas (não zero)
-            if largura_widget > 0 and altura_widget > 0:
-                # Calcular a proporção para redimensionar mantendo a proporção da imagem
-                proporcao = min(largura_widget / imagem_pil.width, altura_widget / imagem_pil.height)
-                nova_largura = int(imagem_pil.width * proporcao)
-                nova_altura = int(imagem_pil.height * proporcao)
-
-                # Verificar se as novas dimensões são válidas
-                if nova_largura > 0 and nova_altura > 0:
-                    # Redimensionar a imagem mantendo a proporção
-                    imagem_redimensionada = imagem_pil.resize((nova_largura, nova_altura), Image.LANCZOS)
-
-                    # Converter a imagem redimensionada para o formato que o Tkinter pode usar
-                    imagem_tk = ImageTk.PhotoImage(imagem_redimensionada)
-                    
-                    # Exibir a imagem no label
-                    label_imagem_1.configure(image=imagem_tk, text="")
-                    label_imagem_1.image = imagem_tk  # Manter a referência para evitar que a imagem seja descartada
-                else:
-                    print("Erro: as dimensões da imagem redimensionada não são válidas.")
-            else:
-                print("Erro: as dimensões do widget são inválidas.")
-
-        print(contrato)
-        
         def freeze_until_button():
             def gravar_valor_emprestado():
                 argumentos[0]['novo_valor_emprestado'].set(float(entrada_verificar.get().replace(',', '.')))
@@ -187,7 +146,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             popup.title("Calculadora para Portabilidades")
             frame_1_pop = customtkinter.CTkFrame(popup)
             label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
-            label_imagem_1 = customtkinter.CTkLabel(frame_1_pop, width=1753, height=1240)
             entrada_verificar = customtkinter.CTkEntry(
                 frame_1_pop,
                 placeholder_text="Informe o valor emprestado"
@@ -196,7 +154,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             valor_emprestado_botao = customtkinter.CTkButton(
                 frame_1_pop, text="alterar valor liberado", command=gravar_valor_emprestado, width=100
             )
-            mostrar_pdf(label_imagem_1)
             argumentos[0]['draw_header'](frame_1_pop)
             frame_1_pop.pack(fill="both", expand=True)
             label_1_pop.configure(text=f"O contrato {contrato} está com valor emprestado incorreto para o cálculo, por favor informe um valor emprestado válido (VALOR LIBERADO): ")
@@ -204,9 +161,6 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             entrada_verificar.pack()
             valor_emprestado_botao.pack()
             argumentos[0]["exibir_pagina"](frame_1_pop)
-            # label_imagem_1.pack()
-            
-
 
             # button = customtkinter.CTkButton(frame_1_pop, text="Descongelar", command=popup.destroy)  # Botão para fechar o popup
             popup.wait_window()  # Congela a execução até que o popup seja fechado
