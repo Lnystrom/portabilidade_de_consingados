@@ -612,6 +612,8 @@ def start_gui():
 
             label_11.pack(padx = 30, side = "right")
             link_button.pack(padx = 30, side = "right")
+            
+            self.protocol("WM_DELETE_WINDOW", encerrar)
 
     app = App()
     app.mainloop()
