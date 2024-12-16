@@ -24,7 +24,7 @@ Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos 
 A estrutura do código é organizada em duas partes principais:
 
 ### 1. Interface Gráfica (GUI)
-- **Bibliotecas**: `customtkinter`
+- **Bibliotecas**: `customtkinter`, `fitz`, `PIL` e `webbrowser`
 - Responsável pela interação com o usuário, permitindo a entrada do CPF, seleção de arquivos PDF e criação de pastas para armazenar os dados.
 - A interface é criada com `customtkinter`, fornecendo uma experiência de usuário simples e eficiente para navegar entre as etapas do processo.
 
