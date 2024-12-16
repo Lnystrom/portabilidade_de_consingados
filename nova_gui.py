@@ -181,6 +181,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
             popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
+            
             popup.geometry(f"{argumentos[0]['largura']}x{argumentos[0]['altura']}+0+0")
             popup.attributes('-fullscreen', True)
             popup.title("Calculadora para Portabilidades")
@@ -202,7 +203,8 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             label_1_pop.pack()
             entrada_verificar.pack()
             valor_emprestado_botao.pack()
-            label_imagem_1.pack()
+            argumentos[0]["exibir_pagina"](frame_1_pop)
+            # label_imagem_1.pack()
             
 
 
@@ -415,7 +417,6 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                     print(out_folder)
-                    exibir_pagina()
                 show_next_frame()
                 ler_pdf(out_folder, argumentos_ler_pdf)                
 
@@ -434,18 +435,29 @@ def start_gui():
                 label_image.pack()
                 label_image.image = imagem_ctk
 
-            def exibir_pagina():
+            def exibir_pagina(frame):
                 # Abre o arquivo PDF
                 doc = fitz.open(f"{self.result.get()}/consignado.pdf")
 
                 # Itera sobre cada página do PDF
                 for page_num in range(doc.page_count):
                     page = doc.load_page(page_num)  # Carrega a página
-                    pix = page.get_pixmap()  # Gera uma imagem a partir da página
+                    matriz = fitz.Matrix(1.5, 1.5)  # Aumenta a resolução para 3 vezes maior
+                    pix = page.get_pixmap(matrix=matriz)  # Gera uma imagem a partir da página
                     output_image = f"{self.result.get()}/pagina_{page_num + 1}.png"
                     pix.save(output_image)  # Salva a imagem como PNG
                     print(f"Página {page_num + 1} salva como {output_image}")
                     lista_de_imagens.append(output_image)
+
+                imagem_png = Image.open(f"{self.result.get()}/pagina_3.png")
+                largura, altura = imagem_png.size
+                largura = round(largura*1)
+                altura = round(altura*1)
+                imagem_png = imagem_png.resize((largura, altura))
+                imagem_ctk = ImageTk.PhotoImage(imagem_png)
+                label_image = customtkinter.CTkLabel(frame, image = imagem_ctk, text="")
+                label_image.pack(pady=20)
+                label_image.image = imagem_ctk
 
                 
 
@@ -631,7 +643,8 @@ def start_gui():
                     'x': x,
                     'y': y,
                     'draw_header': draw_header,
-                    'lista_de_imagens': lista_de_imagens
+                    'lista_de_imagens': lista_de_imagens,
+                    'exibir_pagina': exibir_pagina
                 }
             ]
 
