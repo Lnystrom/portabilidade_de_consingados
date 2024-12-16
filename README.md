@@ -28,15 +28,38 @@ A estrutura do código é organizada em duas partes principais:
 - Responsável pela interação com o usuário, permitindo a entrada do CPF, seleção de arquivos PDF e criação de pastas para armazenar os dados.
 - A interface é criada com `customtkinter`, fornecendo uma experiência de usuário simples e eficiente para navegar entre as etapas do processo.
 
+
 ### 2. Processamento de Dados e Cálculos
-- **Bibliotecas**: `pdfplumber`, `scipy.optimize`, `matplotlib`, `numpy`, `pandas`, `datetime`
-- **Funções**:
-  - **`calcular_taxa`**: Calcula a taxa de juros periódica usando o método de Newton-Raphson.
-  - **`calcular_liquidacao`**: Calcula o valor de liquidação de um empréstimo, levando em consideração as parcelas restantes e a taxa de juros.
-  - **Leitura de PDF**: Extração de dados de contratos consignados em formato PDF e validação dos dados antes de realizar cálculos.
+
+#### **Bibliotecas Utilizadas**
+
+- `pdfplumber`: Extração de dados de contratos em PDF.
+- `scipy.optimize`: Método de otimização para cálculo da taxa de juros (Newton-Raphson).
+- `matplotlib`: Visualização gráfica.
+- `numpy`: Operações numéricas.
+- `pandas`: Manipulação de dados.
+- `datetime`: Manipulação de datas.
+
+#### **Funções Principais**
+
+- **`calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01)`**  
+  Calcula a taxa de juros periódica usando o método de Newton-Raphson.
+
+- **`calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal)`**  
+  Calcula o valor de liquidação do empréstimo, considerando parcelas restantes e taxa de juros.
+
+- **`verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, argumentos)`**  
+  Valida dados extraídos do contrato (CPF, nome e valor empenhado).
+
+- **`ler_pdf(out_folder, argumentos)`**  
+  Extrai dados de um contrato em PDF, como CPF, valor do empréstimo e parcelas restantes.
+
+- **`imprimir_resultados(out_folder)`**  
+  Exibe os resultados de taxa de juros e valor de liquidação de forma formatada.
+
 
 ## Como Usar
-
+---
 1. **Preparação**:
    - Certifique-se de não retirar o executável de dentro da pasta em que veio
 
