@@ -52,7 +52,7 @@ A estrutura do código é organizada em duas partes principais:
   Valida dados extraídos do contrato (CPF, nome e valor empenhado).
 
 - **`ler_pdf(out_folder, argumentos)`**  
-  Extrai dados de um contrato em PDF, como CPF, valor do empréstimo e parcelas restantes.
+  Extrai dados de um contrato em PDF, como valor do empréstimo e parcelas restantes.
 
 - **`imprimir_resultados(out_folder)`**  
   Exibe os resultados de taxa de juros e valor de liquidação de forma formatada.
