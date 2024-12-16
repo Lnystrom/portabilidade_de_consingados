@@ -281,7 +281,7 @@ def start_gui():
             super().__init__()
 
             # configure window
-            self.title("Calculadora para Portabilidades")
+            self.title("Calculadora de Portabilidades")
             self.geometry(f"{screen_width}x{screen_height}+0+0")
             self.attributes('-fullscreen', True)
             # self.attributes('-zoomed', True)
@@ -491,7 +491,7 @@ def start_gui():
                 self.lista_de_frames[0]
             )  # Desenha o cabeçalho no primeiro frame
             label_1 = customtkinter.CTkLabel(
-                self.lista_de_frames[0], text="Calculadora para Portabilidades", font=("Arial", 40)
+                self.lista_de_frames[0], text="Calculadora de Portabilidades", font=("Arial", 40)
             )
             label_1.pack(pady=300, side = "top", anchor = "s")
             label_11 = customtkinter.CTkLabel(self.lista_de_frames[0], font = ("Arial", 20), text="Desenvolvido por Leuryssom Nystrom")
