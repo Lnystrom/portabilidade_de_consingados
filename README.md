@@ -66,14 +66,8 @@ Esses dados podem ser exportados para relatórios ou analisados diretamente na i
 
 Atualmente, o sistema lida bem com a extração de dados, mas algumas melhorias podem ser feitas:
 
-1. **Tratamento de Dados Inconsistentes**:  
-   Adicionar mais validações e verificações de consistência dos dados extraídos dos contratos, especialmente para situações em que o valor do empréstimo é zero ou inválido.
-
-2. **Integração com Banco de Dados**:  
+1. **Integração com Banco de Dados**:  
    Para escalar a solução, seria útil integrar a ferramenta com um banco de dados centralizado, permitindo o armazenamento e acesso rápido a informações históricas de contratos de diferentes clientes.
-
-3. **Melhorias na Interface Gráfica**:  
-   Aperfeiçoar a interface para incluir mais opções de visualização, como filtros por banco ou status dos contratos, e permitir a customização de relatórios.
 
 ## Tecnologias Utilizadas
 

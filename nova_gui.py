@@ -10,7 +10,6 @@ import calendar
 
 # Bibliotecas para manipulação de arquivos PDF
 import pdfplumber
-import pdf2image
 
 # Bibliotecas para gráficos
 import matplotlib.pyplot as plt
