@@ -25,6 +25,8 @@ from scipy.optimize import fsolve
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
+import webbrowser
+
 dados_filtrados = []
 first_table = True
 
@@ -176,8 +178,9 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             # Esta função congela a interface até que o botão seja pressionado
             print("Interface congelada!")
             popup = customtkinter.CTkToplevel()  # Cria uma janela pop-up
-            popup.geometry(f'{argumentos[0]["largura"]}x{argumentos[0]["altura"]}+{argumentos[0]["x"]}+{argumentos[0]["y"]}')
-            popup.title("Congelado")
+            popup.geometry(f"{argumentos[0]['largura']}x{argumentos[0]['altura']}+0+0")
+            popup.attributes('-fullscreen', True)
+            popup.title("Calculadora para Portabilidades")
             frame_1_pop = customtkinter.CTkFrame(popup)
             label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
             label_imagem_1 = customtkinter.CTkLabel(frame_1_pop, width=1753, height=1240)
@@ -320,8 +323,10 @@ def start_gui():
             super().__init__()
 
             # configure window
-            self.title("CustomTkinter complex_example.py")
-            self.geometry(f"{largura}x{altura}+{x}+{y}")
+            self.title("Calculadora para Portabilidades")
+            self.geometry(f"{screen_width}x{screen_height}+0+0")
+            self.attributes('-fullscreen', True)
+            # self.attributes('-zoomed', True)
 
             # configure grid layout (4x4)
             self.grid_columnconfigure(0, weight=1)
@@ -343,6 +348,9 @@ def start_gui():
             # Criar a variável result após a criação da janela
             self.result = customtkinter.StringVar()
             self.novo_valor_emprestado = customtkinter.StringVar()
+
+            def open_link():
+                webbrowser.open("https://www.linkedin.com/in/leuryssom-nystrom-539785219/")
 
             def selecionar_arquivo_pdf():
                 global caminho_destino
@@ -474,7 +482,7 @@ def start_gui():
                         command=encerrar,
                     )  # Cria o botão "Next Page" para o novo frame
 
-                forward_button.pack(pady=200, side="bottom", anchor="n")
+                forward_button.pack(pady=150, side="bottom", anchor="n")
 
 
             # Função para desenhar as barrinhas no topo (cabeçalho)
@@ -499,9 +507,11 @@ def start_gui():
                 self.lista_de_frames[0]
             )  # Desenha o cabeçalho no primeiro frame
             label_1 = customtkinter.CTkLabel(
-                self.lista_de_frames[0], text="Calculadora de Portabilidade", font=("Arial", 40)
+                self.lista_de_frames[0], text="Calculadora para Portabilidades", font=("Arial", 40)
             )
             label_1.pack(pady=300, side = "top", anchor = "s")
+            label_11 = customtkinter.CTkLabel(self.lista_de_frames[0], font = ("Arial", 20), text="Desenvolvido por Leuryssom Nystrom")
+            link_button = customtkinter.CTkButton(self.lista_de_frames[0], text="Acessar o Linkedin", fg_color="transparent", text_color="blue", cursor="hand2", command=open_link)
 
             # --- Frame 2: Identificação do cliente ---
             draw_header(self.lista_de_frames[1])  # Desenha o cabeçalho no segundo frame
@@ -545,7 +555,11 @@ def start_gui():
             label_5 = customtkinter.CTkLabel(
                 self.lista_de_frames[4], text="Correção de Dados", font=("Arial", 20)
             )
+            label_5_1 = customtkinter.CTkLabel(
+                self.lista_de_frames[4], text="Todos os valores indicados estão corretos", font=("Arial", 20)
+            )
             label_5.pack(pady=20)
+            label_5_1.pack(pady = 30)
 
             label_6 = customtkinter.CTkLabel(
                 self.lista_de_frames[4], font=("Arial", 20)
@@ -600,6 +614,9 @@ def start_gui():
                     'draw_header': draw_header,
                 }
             ]
+
+            label_11.pack(padx = 30, side = "right")
+            link_button.pack(padx = 30, side = "right")
 
     app = App()
     app.mainloop()
