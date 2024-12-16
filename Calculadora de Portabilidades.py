@@ -142,7 +142,7 @@ def verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, a
             
             popup.geometry(f"{argumentos[0]['largura']}x{argumentos[0]['altura']}+0+0")
             popup.attributes('-fullscreen', True)
-            popup.title("Calculadora para Portabilidades")
+            popup.title("Calculadora de Portabilidades")
             frame_1_pop = customtkinter.CTkFrame(popup)
             label_1_pop = customtkinter.CTkLabel(frame_1_pop, font=("Arial", 20))
             entrada_verificar = customtkinter.CTkEntry(
