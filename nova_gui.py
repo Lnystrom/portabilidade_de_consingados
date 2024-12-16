@@ -10,6 +10,7 @@ import calendar
 
 # Bibliotecas para manipulação de arquivos PDF
 import pdfplumber
+import pdf2image
 
 # Bibliotecas para gráficos
 import matplotlib.pyplot as plt
@@ -25,7 +26,9 @@ from scipy.optimize import fsolve
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
+# Bibliotecas para expor links
 import webbrowser
+
 
 dados_filtrados = []
 first_table = True
@@ -411,6 +414,7 @@ def start_gui():
                 else: 
                     out_folder = self.result.get()
                     print(out_folder)
+                    exibir_pagina()
                 show_next_frame()
                 ler_pdf(out_folder, argumentos_ler_pdf)                
 
@@ -429,6 +433,18 @@ def start_gui():
                 label_image.pack()
                 label_image.image = imagem_ctk
 
+            def exibir_pagina():
+                # Abre o arquivo PDF
+                doc = fitz.open(f"{self.result.get()}/consignado.pdf")
+
+                # Itera sobre cada página do PDF
+                for page_num in range(doc.page_count):
+                    page = doc.load_page(page_num)  # Carrega a página
+                    pix = page.get_pixmap()  # Gera uma imagem a partir da página
+                    output_image = f"{self.result.get()}/pagina_{page_num + 1}.png"
+                    pix.save(output_image)  # Salva a imagem como PNG
+                    print(f"Página {page_num + 1} salva como {output_image}")
+                
 
             def encerrar():
                     self.destroy()  # Fecha a janela do Tkinter
@@ -612,6 +628,7 @@ def start_gui():
                     'x': x,
                     'y': y,
                     'draw_header': draw_header,
+                    'exibir_pagina':exibir_pagina
                 }
             ]
 
