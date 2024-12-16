@@ -6,7 +6,7 @@
 Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos consignados para beneficiários do INSS, automatizando o processo de extração de dados, cálculos financeiros e geração de relatórios. A ferramenta utiliza bibliotecas de Python para extrair informações de contratos consignados, calcular taxas de juros, valores de liquidação e gerar relatórios detalhados.
 
 ## Instalação
-Basta baixar o arquivo executável clicando [nesse link](https://drive.google.com/uc?export=download&id=chOCXt7ZGDe0lU9ah-nV8U8MG5_XB).
+Basta baixar o arquivo executável clicando [nesse link](https://drive.google.com/uc?export=download&id=1if7chOCXt7ZGDe0lU9ah-nV8U8MG5_XB).
 
 ## Funcionalidades Principais
 
