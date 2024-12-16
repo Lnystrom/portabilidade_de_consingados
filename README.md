@@ -5,6 +5,9 @@
 
 Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos consignados para beneficiários do INSS, automatizando o processo de extração de dados, cálculos financeiros e geração de relatórios. A ferramenta utiliza bibliotecas de Python para extrair informações de contratos consignados, calcular taxas de juros, valores de liquidação e gerar relatórios detalhados.
 
+## Instalação
+Basta baixar o arquivo executável clicando [nesse link](https://drive.google.com/uc?export=download&id=1EYgo5IerLXBETgBCOrT3kZrXLm2dCjcA).
+
 ## Funcionalidades Principais
 
 1. **Extração de Dados de Contratos em PDF**  
@@ -40,24 +43,6 @@ A estrutura do código é organizada em duas partes principais:
 - `pandas`: Manipulação de dados.
 - `datetime`: Manipulação de datas.
 
-#### **Funções Principais**
-
-- **`calcular_taxa(n_periodos, pmt, valor_presente, chute_inicial=0.01)`**  
-  Calcula a taxa de juros periódica usando o método de Newton-Raphson.
-
-- **`calcular_liquidacao(valor_parcela, meses_restantes, taxa_juros_mensal)`**  
-  Calcula o valor de liquidação do empréstimo, considerando parcelas restantes e taxa de juros.
-
-- **`verificar_dados(parcelas, valor_parcela, valor_emprestado, taxa, contrato, argumentos)`**  
-  Valida dados extraídos do contrato (CPF, nome e valor empenhado).
-
-- **`ler_pdf(out_folder, argumentos)`**  
-  Extrai dados de um contrato em PDF, como valor do empréstimo e parcelas restantes.
-
-- **`imprimir_resultados(out_folder)`**  
-  Exibe os resultados de taxa de juros e valor de liquidação de forma formatada.
-
-
 ## Como Usar
 ---
 1. **Preparação**:
@@ -87,12 +72,3 @@ Atualmente, o sistema lida bem com a extração de dados, mas algumas melhorias 
 
 1. **Integração com Banco de Dados**:  
    Para escalar a solução, seria útil integrar a ferramenta com um banco de dados centralizado, permitindo o armazenamento e acesso rápido a informações históricas de contratos de diferentes clientes.
-
-## Tecnologias Utilizadas
-
-- **Python**: Linguagem de programação utilizada para o desenvolvimento do sistema.
-- **Tkinter**: Biblioteca para a criação da interface gráfica do usuário (GUI).
-- **pdfplumber**: Para leitura e extração de dados de arquivos PDF.
-- **Scipy**: Usado para otimização, incluindo o cálculo de taxas de juros através do método de Newton-Raphson.
-- **Matplotlib**: Para gerar gráficos e visualizações.
-- **Pandas**: Para manipulação e análise de dados.
