@@ -3,7 +3,7 @@
 
 **Ferramenta para Facilitar a Portabilidade de Crédito Consignado para Beneficiários do INSS**
 
-Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos consignados para beneficiários do INSS, automatizando o processo de extração de dados, cálculos financeiros e geração de relatórios. A ferramenta utiliza bibliotecas poderosas de Python para extrair informações de contratos consignados, calcular taxas de juros, valores de liquidação e gerar relatórios detalhados.
+Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos consignados para beneficiários do INSS, automatizando o processo de extração de dados, cálculos financeiros e geração de relatórios. A ferramenta utiliza bibliotecas de Python para extrair informações de contratos consignados, calcular taxas de juros, valores de liquidação e gerar relatórios detalhados.
 
 ## Funcionalidades Principais
 
@@ -24,9 +24,9 @@ Este projeto tem como objetivo facilitar a análise e a gestão de empréstimos 
 A estrutura do código é organizada em duas partes principais:
 
 ### 1. Interface Gráfica (GUI)
-- **Bibliotecas**: `Tkinter`, `screeninfo`
+- **Bibliotecas**: `customtkinter`
 - Responsável pela interação com o usuário, permitindo a entrada do CPF, seleção de arquivos PDF e criação de pastas para armazenar os dados.
-- A interface é criada com `Tkinter`, fornecendo uma experiência de usuário simples e eficiente para navegar entre as etapas do processo.
+- A interface é criada com `customtkinter`, fornecendo uma experiência de usuário simples e eficiente para navegar entre as etapas do processo.
 
 ### 2. Processamento de Dados e Cálculos
 - **Bibliotecas**: `pdfplumber`, `scipy.optimize`, `matplotlib`, `numpy`, `pandas`, `datetime`
@@ -38,14 +38,10 @@ A estrutura do código é organizada em duas partes principais:
 ## Como Usar
 
 1. **Preparação**:
-   - Certifique-se de ter o Python instalado (recomendado Python 3.7 ou superior).
-   - Instale as dependências necessárias. Você pode fazer isso com o comando:
-     ```bash
-     pip install -r requirements.txt
-     ```
+   - Certifique-se de não retirar o executável de dentro da pasta em que veio
 
 2. **Executar o Sistema**:
-   - Execute o arquivo `main.py` para abrir a interface gráfica.
+   - Execute o arquivo `Calculadora de Portabilidades.exe` para abrir a interface gráfica.
    - Insira o CPF do cliente e clique em "Criar pasta" para armazenar os dados.
    - Selecione o arquivo PDF do contrato consignado e clique em "Anexar Extrato".
    - A ferramenta processará os dados do contrato, realizará os cálculos financeiros e exibirá o valor de liquidação e outras informações importantes.
