@@ -1,6 +1,3 @@
-Claro! Aqui está um modelo de `README.md` baseado no conteúdo que você enviou:
-
----
 
 # Portabilidade de Consignados
 
