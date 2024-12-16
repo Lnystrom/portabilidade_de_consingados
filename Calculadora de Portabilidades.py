@@ -2,6 +2,7 @@ import shutil
 import os
 import customtkinter
 from screeninfo import get_monitors
+import sys
 
 # Bibliotecas de data
 from dateutil.relativedelta import relativedelta
@@ -416,7 +417,7 @@ def start_gui():
 
             def encerrar():
                     self.destroy()  # Fecha a janela do Tkinter
-                    exit()
+                    sys.exit()
 
             # Função para esconder todos os frames
             def hide_all_frames():
